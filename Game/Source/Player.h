@@ -5,6 +5,7 @@
 
 #include "Entity.h"
 #include "Animation.h"
+#include "Physics.h"
 
 #include "Point.h"
 #include "Log.h"
@@ -25,35 +26,21 @@ public:
 
     void SetTexture(SDL_Texture *tex);
 
-    void Refill();
-
     void RestartPlayer();
 
     SDL_Rect GetCollisionBounds()
     {
-        return rect;
+        SDL_Rect collision = {};
+        body->GetCollision(collision);
+        return collision;
     }
 
-public:
+public: //Characteristics
 
-    int health = 0;
-    int maxHealth = 0;
-
-    int healthStat = 1;
-    int defenseStat = 1;
-    int strengthStat = 1;
-    int velocityStat = 1;
-    
-    int lvl = 1;
-    int exp = 0;
-
-    int playerSpeed = 8;
 
 public:
-    SDL_Texture* texture;
-
-    SDL_Rect rect;
-    SDL_Rect wCollider;
+    SDL_Texture* texture = nullptr;
+    DynamicBody* body = nullptr;
 
 public:
     bool godMode = false;

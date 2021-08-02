@@ -18,6 +18,8 @@ enum Scenes
 {
 	NO_BODY = -1,
 	LOGO_SCENE,
+	MAIN_MENU,
+	LEVEL_EDITOR
 };
 
 class Scene : public Module
@@ -69,15 +71,16 @@ private:
 
 	//Setters
 	void SetLogoScene();
+	void SetMainMenu();
+	void SetLevelEditor();
 
 	//Updaters
 	void UpdateLogoScene(float dt);
+	void UpdateMainMenu(float dt);
+	void UpdateLevelEditor(float dt);
 
 private: //BUTTONS
 	bool OnGuiMouseClickEvent(GuiControl* control);
-
-	//TEST, for deleting
-	DynamicBody* test = nullptr;
 };
 
 #endif // __SCENE_H__

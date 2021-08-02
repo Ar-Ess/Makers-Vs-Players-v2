@@ -82,6 +82,9 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	if (currScene == LOGO_SCENE) UpdateLogoScene(dt);
+	else if (currScene == MAIN_MENU) UpdateMainMenu(dt);
+	else if (currScene == LEVEL_EDITOR) UpdateLevelEditor(dt);
+	
 	return true;
 }
 
@@ -104,6 +107,12 @@ bool Scene::CleanUp()
 	if (currScene == LOGO_SCENE)
 	{
 	}
+	else if (currScene == MAIN_MENU)
+	{
+	}
+	else if (currScene == LEVEL_EDITOR)
+	{
+	}
 
 	return true;
 }
@@ -118,101 +127,61 @@ void Scene::SetScene(Scenes scene)
 	currScene = scene;
 
 	if (scene == LOGO_SCENE) SetLogoScene();
+	else if (scene == MAIN_MENU) SetMainMenu();
+	else if (scene == LEVEL_EDITOR) SetLevelEditor();
 
 	easing.ResetIterations();
 }
 
 void Scene::SetLogoScene()
-{	
-	physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
-	physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);
+{
+
+}
+
+void Scene::SetMainMenu()
+{
+
+}
+
+void Scene::SetLevelEditor()
+{
+	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 300.0f }, { 300, 300, 20, 40 }, { 0, 0 }, {0, 0}, 1.5f);
+	/*physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
+	physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);*/
 }
 
 void Scene::UpdateLogoScene(float dt)
 {
-	int mouseX, mouseY;
-	app->input->GetMousePosition(mouseX, mouseY);
-	float x = (float)mouseX;
-	float y = (float)mouseY;
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) SetScene(MAIN_MENU);
+}
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	{
-		test = nullptr;
-		//test = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ x, y }, CircleCollider{ x, y, 40,}, { 0, 0 }, { 0, 0 }, 1.5f);
-		test = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ x, y }, { mouseX, mouseY, 20, 40 }, { 0, 0 }, { 0, 0 }, 1.5f);
-		test->ResetForces();
-	}
+void Scene::UpdateMainMenu(float dt)
+{
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) SetScene(LEVEL_EDITOR);
+}
 
+void Scene::UpdateLevelEditor(float dt)
+{
 	physics->Update(dt);
 
-	// BUG SOLVINGS
-	// (Known problem, dt++ when frame frozzen, then y++++ for gravity/velocity (and for x forces/velocity too)) / Death limit bug - Not solved but info: It happens in the function "Death limit". When camera is mover, y axis of body boost the hell out and it detects outside the limits
-	// End static body bug - When a dinamic body approaches the limits of a static body, it automatically teleports to the limit	
-	// (trerballar amb velocity * massa) Wall jump bugg - Gravity affects a lot on walljump, so at the 2/3rd jump you can not wall jump more because the force applied is so low. How to solve that?
-
-	// NEW BUG
-	// Double jump jank. If double jump fast, going higher, else, not higher
-	// SPHERE COLLISION GROUND
-
-	// TO IMPLEMENT
-	// Wall friction when walljump active
-	// RPG physics/scenario
-
-	// FUTURE IMPLEMENTATION
-	// Implement join: "Rope", fero si o si ELASTIC -> Future Bug, Elastic + Velocity 8 = the end of the actual game :) + feature
-	// Velocity Limit library, + boleans per activar/desactivar cada un per utilitzarlos a la vegada si vull
-	// Wall jump library (real (com el que tinc ara), no realistic...)
-	// Add raycasing
-	// Add water rect (onWater / onAir bools)
-
-	physics->DeathLimit({ 0,0,1280,720 });
-
-	if (test != nullptr)
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		{
-			test->Jump(-300.0f, true);
-			test->WallJump({ 300.0f, 350.0f });
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) test->Move(5.0f, Direction::LEFT, 300.0f);
-			else test->Move(5.0f, Direction::LEFT, 200.0f);
-
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN)
-			{
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) test->Dash(400.0f, DashDirection::UPLEFT, 1);
-				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) test->Dash(400.0f, DashDirection::DOWNLEFT, 1);
-				else test->Dash(400.0f, DashDirection::LEFT, 1);
-			}
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) test->Move(5.0f, Direction::RIGHT, 300.0f);
-			else test->Move(5.0f, Direction::RIGHT, 200.0f);
-
-			if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN)
-			{
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) test->Dash(400.0f, DashDirection::UPRIGHT, 1);
-				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) test->Dash(400.0f, DashDirection::DOWNRIGHT, 1);
-				else test->Dash(400.0f, DashDirection::RIGHT, 1);
-			}
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN) test->Dash(400.0f, DashDirection::DOWN, 1);
-
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN) test->Dash(400.0f, DashDirection::UP, 1);
+		player1->body->Jump(-300.0f, false);
 	}
 
-	physics->Draw(test);
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) player1->body->Move(5.0f, Direction::LEFT, 300.0f);
+		else player1->body->Move(5.0f, Direction::LEFT, 200.0f);
+	}
 
-	//if (test != nullptr)
-	//{
-	//	fPoint pos = test->GetPosition();
-	//	LOG("BodyX: %.3f BodyY: %.3f", pos.x, pos.y);
-	//}
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) player1->body->Move(5.0f, Direction::RIGHT, 300.0f);
+		else player1->body->Move(5.0f, Direction::RIGHT, 200.0f);
+	}
+
+	physics->Draw(player1->body);
 }
 
 // GUI CONTROLS
@@ -222,6 +191,10 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	switch (currScene)
 	{
 	case LOGO_SCENE:
+		break;
+	case MAIN_MENU:
+		break;
+	case LEVEL_EDITOR:
 		break;
 	}
 
@@ -233,6 +206,10 @@ void Scene::DebugCommands()
 	switch (currScene)
 	{
 	case LOGO_SCENE:
+		break;
+	case MAIN_MENU:
+		break;
+	case LEVEL_EDITOR:
 		break;
 	}
 }

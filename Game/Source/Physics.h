@@ -125,6 +125,16 @@ public: //Getters
 		if (colliderType == RECTANGLE) return {rect.w, rect.h};
 		return {(int)circle.radius, 0};
 	}
+	// This function returns the rect or circle of the body
+	void GetCollision(SDL_Rect& rectangle)
+	{
+		rectangle = rect;
+	}
+	// This function returns the rect or circle of the body
+	void GetCollision(CircleCollider& circ)
+	{
+		circ = circle;
+	}
 	// This function returns the type of collision the body has
 	CollisionType GetCollisionType() const
 	{

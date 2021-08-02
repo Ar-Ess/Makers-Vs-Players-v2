@@ -41,10 +41,10 @@ public:
 		return (radius * 2.0f);
 	}
 
-	fPoint GetAltLeftPosition() const
-	{
-		return {x - radius, y - radius};
-	}
+	//fPoint GetAltLeftPosition()
+	//{
+	//	return {x - radius, y - radius};
+	//}
 };
 
 class Collision

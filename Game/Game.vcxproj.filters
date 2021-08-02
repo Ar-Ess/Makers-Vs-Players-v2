@@ -108,6 +108,9 @@
     <ClCompile Include="Source\Physics.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LevelEditorScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -260,6 +263,9 @@
     </ClInclude>
     <ClInclude Include="Source\Physics.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LevelEditorScene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -107,6 +107,7 @@
     <ClCompile Include="Source\GuiSlider.cpp" />
     <ClCompile Include="Source\GuiString.cpp" />
     <ClCompile Include="Source\Item.cpp" />
+    <ClCompile Include="Source\LevelEditorScene.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Audio.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Source\GuiSlider.h" />
     <ClInclude Include="Source\GuiString.h" />
     <ClInclude Include="Source\Item.h" />
+    <ClInclude Include="Source\LevelEditorScene.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Particle.h" />

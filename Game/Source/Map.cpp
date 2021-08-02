@@ -67,7 +67,7 @@ void Map::Draw()
 		MapLayer* layer = data.orgLayers[i];
 		if (strcmp(layer->name.GetString(), "colliders") != 0)
 		{
-			if (layer->properties.GetProperty("y") * SCALE < p->rect.y)
+			if (layer->properties.GetProperty("y") * SCALE < p->body->GetPosition().y)
 			{
 				if ((layer->properties.GetProperty("drawable", 1) != 0) || drawColliders) DrawLayer(i);
 			}

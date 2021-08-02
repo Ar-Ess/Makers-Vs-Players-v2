@@ -22,11 +22,6 @@ void Player::SetTexture(SDL_Texture *tex)
     texture = tex;
 }
 
-void Player::Refill()
-{
-    health = maxHealth;
-}
-
 void Player::RestartPlayer()
 {
 }
