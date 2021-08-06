@@ -28,6 +28,8 @@ public:
 
     void RestartPlayer();
 
+    void PlayerControls();
+
     SDL_Rect GetCollisionBounds()
     {
         SDL_Rect collision = {};

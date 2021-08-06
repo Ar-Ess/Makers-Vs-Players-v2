@@ -547,13 +547,30 @@ void Physics::DestroyScenario()
 			delete list->data;
 		}
 	}
-	bodyList.Clear();
 	return;
 }
 
 void Physics::PausePhysics(bool pause)
 {
 	globalPause = pause;
+}
+
+void Physics::ResetAllForces()
+{
+	ListItem<Body*>* list;
+	for (list = bodyList.start; list != NULL; list = list->next)
+	{
+		switch (list->data->bodyType)
+		{
+		case BodyType::DYNAMIC_BODY:
+			DynamicBody* dB = (DynamicBody*)list->data;
+			dB->acceleration.SetToZero();
+			dB->velocity.SetToZero();
+			dB->sumForces.SetToZero();
+			dB->forces.Clear();
+			break;
+		}
+	}
 }
 
 void Physics::CheckCollisions()

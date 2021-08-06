@@ -12,11 +12,8 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "DialogueManager.h"
-#include "Transition.h"
-#include "Map.h"
-#include "Boss.h"
 #include "Physics.h"
+#include "LevelEditorScene.h"
 
 #include "GuiManager.h"
 #include "GuiString.h"
@@ -145,9 +142,13 @@ void Scene::SetMainMenu()
 
 void Scene::SetLevelEditor()
 {
-	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 300.0f }, { 300, 300, 20, 40 }, { 0, 0 }, {0, 0}, 1.5f);
-	/*physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
-	physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);*/
+	levelEditor = new LevelEditor();
+	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 700, 20, 40 }, { 0, 0 }, {0, 0}, 1.5f);
+	physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
+	physics->PausePhysics(true);
+	//physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);
+
+	levelEditor->Start();
 }
 
 void Scene::UpdateLogoScene(float dt)
@@ -162,26 +163,8 @@ void Scene::UpdateMainMenu(float dt)
 
 void Scene::UpdateLevelEditor(float dt)
 {
-	physics->Update(dt);
-
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		player1->body->Jump(-300.0f, false);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	{
-		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) player1->body->Move(5.0f, Direction::LEFT, 300.0f);
-		else player1->body->Move(5.0f, Direction::LEFT, 200.0f);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT) player1->body->Move(5.0f, Direction::RIGHT, 300.0f);
-		else player1->body->Move(5.0f, Direction::RIGHT, 200.0f);
-	}
-
-	physics->Draw(player1->body);
+	levelEditor->Update(dt, player1, physics);
+	levelEditor->Draw(player1, physics);
 }
 
 // GUI CONTROLS

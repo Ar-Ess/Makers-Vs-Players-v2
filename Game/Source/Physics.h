@@ -300,6 +300,8 @@ public:
 	void DestroyScenario();
 	//Pauses all physics. Depending of true/false inputted, will pause/unpause the physics respectively
 	void PausePhysics(bool pause);
+	//Resets to 0 all forces, velocities, accelerations applied to any existing dynamic body
+	void ResetAllForces();
 
 public:
 	bool debug = true;
