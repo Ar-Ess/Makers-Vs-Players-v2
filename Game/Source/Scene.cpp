@@ -143,7 +143,7 @@ void Scene::SetMainMenu()
 void Scene::SetLevelEditor()
 {
 	levelEditor = new LevelEditor();
-	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 700, 20, 40 }, { 0, 0 }, {0, 0}, 1.5f);
+	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 53, 53 }, { 0, 0 }, {0, 0}, 1.5f);
 	physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
 	physics->PausePhysics(true);
 	//physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);

@@ -62,9 +62,9 @@ void LevelEditor::Draw(Player* p, Physics* phys)
 
 void LevelEditor::DebugDraw()
 {
-	Uint8 alpha = 250 / ((Uint8)state + 1);
-	for (int i = 0; i < wTileScreen[currScreen]; i++) app->render->DrawLine((i + 1) * TILE_SIZE, MAX_SCREEN_Y, (i + 1) * TILE_SIZE, 0, {100, 100, 100, alpha });
-	for (int i = 0; i < hTileScreen; i++) app->render->DrawLine(MAX_SCREEN_X, i * TILE_SIZE, 0, i * TILE_SIZE, { 100, 100, 100, alpha });
+	Uint8 alpha = 230 / ((Uint8)state + 1);
+	for (int i = 0; i < wTileScreen[currScreen + 1]; i++) app->render->DrawLine((i + 1) * TILE_SIZE, MAX_SCREEN_Y, (i + 1) * TILE_SIZE, 0, {100, 100, 100, alpha });
+	for (int i = 0; i < TILE_PER_SCREEN_H; i++) app->render->DrawLine(MAX_SCREEN_X, i * TILE_SIZE, 0, i * TILE_SIZE, { 100, 100, 100, alpha });
 }
 
 void LevelEditor::CleanUp()
@@ -76,28 +76,40 @@ void LevelEditor::CleanUp()
 void LevelEditor::UpdateEditor(Player* p)
 {
 	CameraDisplace();
+	ScreenAddition();
 }
 
 void LevelEditor::CameraDisplace()
 {
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		app->render->camera.y -= CAM_VEL;
+		if (app->render->camera.y < 0) app->render->camera.y += CAM_VEL;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		app->render->camera.y += CAM_VEL;
+		if (app->render->camera.y > -INIT_CAM_Y) app->render->camera.y -= CAM_VEL;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		app->render->camera.x -= CAM_VEL;
+		if (app->render->camera.x < 0) app->render->camera.x += CAM_VEL;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		app->render->camera.x += CAM_VEL;
+		if (app->render->camera.x > -(TILE_SIZE * (wTileScreen[currScreen]))) app->render->camera.x -= CAM_VEL;
+	}
+}
+
+void LevelEditor::ScreenAddition()
+{
+	if (app->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && currScreen < 9) currScreen++;
+
+	if (app->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && currScreen > 0)
+	{
+		currScreen--;
+		app->render->camera.x = -wTileScreen[currScreen] * TILE_SIZE;
 	}
 }
 
