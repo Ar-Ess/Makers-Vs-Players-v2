@@ -150,6 +150,13 @@ public: //Getters
 	{
 		return mass;
 	}
+	//This function returns the body as an SDL_Rect (from SDL library) in case of being a Rectangle. If it is not, it returns {0, 0, 0, 0}.
+	SDL_Rect ReturnBodyRect() const
+	{
+		if (colliderType == RECTANGLE) return rect;
+
+		return {0, 0, 0, 0};
+	}
 
 protected:
 	friend class Physics;

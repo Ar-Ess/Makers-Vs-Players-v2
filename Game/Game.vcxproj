@@ -101,6 +101,7 @@
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\Font.cpp" />
     <ClCompile Include="Source\FontTTF.cpp" />
+    <ClCompile Include="Source\GroundTile.cpp" />
     <ClCompile Include="Source\GuiButton.cpp" />
     <ClCompile Include="Source\GuiCheckBox.cpp" />
     <ClCompile Include="Source\GuiManager.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\Font.h" />
     <ClInclude Include="Source\FontTTF.h" />
+    <ClInclude Include="Source\GroundTile.h" />
     <ClInclude Include="Source\GuiButton.h" />
     <ClInclude Include="Source\GuiCheckBox.h" />
     <ClInclude Include="Source\GuiControl.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Spline.h" />
     <ClInclude Include="Source\Textures.h" />
+    <ClInclude Include="Source\Tile.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Transition.h" />
     <ClInclude Include="Source\Window.h" />

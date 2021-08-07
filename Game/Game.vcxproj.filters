@@ -111,6 +111,9 @@
     <ClCompile Include="Source\LevelEditorScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GroundTile.cpp">
+      <Filter>Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -267,6 +270,12 @@
     <ClInclude Include="Source\LevelEditorScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Tile.h">
+      <Filter>Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GroundTile.h">
+      <Filter>Tiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -295,6 +304,9 @@
     </Filter>
     <Filter Include="Particles">
       <UniqueIdentifier>{e325deaa-5a4a-4eac-bb2a-4a60bc8d88c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tiles">
+      <UniqueIdentifier>{715ef6e1-c7da-42c0-b023-fb28f14b92e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
