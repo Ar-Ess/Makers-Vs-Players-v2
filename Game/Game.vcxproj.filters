@@ -48,9 +48,6 @@
     <ClCompile Include="Source\Item.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Map.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Font.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -194,9 +191,6 @@
     </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
       <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Font.h">
       <Filter>Utils</Filter>

@@ -6,7 +6,14 @@
 #include "Physics.h"
 
 struct SDL_Texture;
+class LevelEditor;
 struct SDL_Rect;
+
+enum class TileType
+{
+	NO_TILE = 0,
+	GROUND
+};
 
 class Tile
 {
@@ -28,11 +35,10 @@ public:
 public:
 
 	SDL_Texture* texture = nullptr;
-
-	iPoint position;
-
+	LevelEditor* editor = nullptr;
+	TileType type = TileType::NO_TILE;
+	fPoint position;
 	iPoint coordinates;
-
 
 };
 

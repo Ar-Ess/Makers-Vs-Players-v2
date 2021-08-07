@@ -45,9 +45,6 @@ bool Scene::Awake()
 
 bool Scene::Start()
 {
-	player1 = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	physics = new Physics();
-
 	//DEBUG BOOLS
 	app->guiManager->debugGui = false;
 
@@ -109,6 +106,7 @@ bool Scene::CleanUp()
 	}
 	else if (currScene == LEVEL_EDITOR)
 	{
+		levelEditor->CleanUp();
 	}
 
 	return true;
@@ -143,11 +141,6 @@ void Scene::SetMainMenu()
 void Scene::SetLevelEditor()
 {
 	levelEditor = new LevelEditor();
-	player1->body = (DynamicBody*)physics->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 53, 53 }, { 0, 0 }, {0, 0}, 1.5f);
-	physics->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
-	physics->PausePhysics(true);
-	//physics->SetScenarioPreset(ScenarioPreset::PLATFORMER_1280x720_SCENARIO_PRESET);
-
 	levelEditor->Start();
 }
 
@@ -163,8 +156,8 @@ void Scene::UpdateMainMenu(float dt)
 
 void Scene::UpdateLevelEditor(float dt)
 {
-	levelEditor->Update(dt, player1, physics);
-	levelEditor->Draw(player1, physics);
+	levelEditor->Update(dt);
+	levelEditor->Draw();
 }
 
 // GUI CONTROLS

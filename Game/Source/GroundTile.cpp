@@ -10,13 +10,14 @@ GroundTile::GroundTile()
 
 }
 
-GroundTile::GroundTile(iPoint pos, iPoint coords)
+GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE)
 {
-	texture = app->tex->Load("Assets/Tilesets/ground_tileset.png");
+	texture = app->tex->Load("Assets/Textures/Tilesets/ground_tileset.png");
 	position = pos;
 	coordinates = coords;
-
-	//groundRect = { pos.x, pos.y, 41, 41 };
+	editor = lE;
+	type = TileType::GROUND;
+	body = (StaticBody*)editor->phys->CreateBody(BodyType::STATIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE });
 }
 
 GroundTile::~GroundTile()
@@ -44,19 +45,22 @@ void GroundTile::Draw()
 	bool upR = false;
 	bool downR = false;
 
-	ListItem<GroundTile*>* list;
-	for (list = app->scene->levelEditor->tiles.start; list != nullptr; list = list->next)
+	ListItem<Tile*>* list;
+	for (list = editor->tiles.start; list != nullptr; list = list->next)
 	{
-		if (list->data->coordinates == upTile) up = true;
-		if (list->data->coordinates == downTile) down = true;
-		if (list->data->coordinates == leftTile) left = true;
-		if (list->data->coordinates == rightTile) right = true;
-		if (list->data->coordinates == upLTile) upL = true;
-		if (list->data->coordinates == downLTile) downL = true;
-		if (list->data->coordinates == upRTile) upR = true;
-		if (list->data->coordinates == downRTile) downR = true;
+		if (list->data->type == TileType::GROUND)
+		{
+			if (list->data->coordinates == upTile) up = true;
+			if (list->data->coordinates == downTile) down = true;
+			if (list->data->coordinates == leftTile) left = true;
+			if (list->data->coordinates == rightTile) right = true;
+			if (list->data->coordinates == upLTile) upL = true;
+			if (list->data->coordinates == downLTile) downL = true;
+			if (list->data->coordinates == upRTile) upR = true;
+			if (list->data->coordinates == downRTile) downR = true;
 
-		if (up && down && left && right && upL && downL && upR && downR) break;
+			if (up && down && left && right && upL && downL && upR && downR) break;
+		}
 	}
 
 	if (!up && left && !down && !right) //No Diagonal
@@ -100,7 +104,7 @@ void GroundTile::Draw()
 		if (downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[0]);
 		else if (downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[8], true, true, 180);
 		else if (!downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[9], true, true, 180);
-		else if (!downL && !downR) app->render->DrawTexture(texture, position.x, position.y, &ground11, 1.0f, 180);
+		else if (!downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[10], true, true, 180);
 	}
 	else if (up && !left && down && right) //Diagonal UpR, DownR, Both
 	{

@@ -113,7 +113,6 @@
     <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Audio.cpp" />
     <ClCompile Include="Source\Input.cpp" />
-    <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\NPC.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticlePool.cpp" />
@@ -152,7 +151,6 @@
     <ClInclude Include="Source\GuiString.h" />
     <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\LevelEditorScene.h" />
-    <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\ParticlePool.h" />

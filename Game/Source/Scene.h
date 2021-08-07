@@ -56,8 +56,6 @@ private: //DEBUG
 
 private: //Pointers
 	friend class Map;
-	Player* player1 = nullptr;
-	Physics* physics = nullptr;
 	LevelEditor* levelEditor = nullptr;
 
 private: //SPLINES

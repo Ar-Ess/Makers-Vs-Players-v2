@@ -1,8 +1,12 @@
+#include "App.h"
+#include "EntityManager.h"
+
 #include "LevelEditorScene.h"
 #include "Physics.h"
 #include "Player.h"
 #include "Input.h"
 #include "Render.h"
+#include "GroundTile.h"
 
 LevelEditor::LevelEditor()
 {
@@ -14,12 +18,17 @@ LevelEditor::~LevelEditor()
 
 void LevelEditor::Start()
 {
+	phys = new Physics();
+	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+	player->body = (DynamicBody*)phys->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 53, 53 }, { 0, 0 }, { 0, 0 }, 1.5f);
+	phys->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
+	phys->PausePhysics(true);
+	
 	app->render->camera = {INIT_CAM_X, -INIT_CAM_Y };
 	state = EditorState::EDITING;
-	
 }
 
-void LevelEditor::Update(float dt, Player* p, Physics* phys)
+void LevelEditor::Update(float dt)
 {
 	phys->Update(dt);
 
@@ -41,11 +50,11 @@ void LevelEditor::Update(float dt, Player* p, Physics* phys)
 	switch (state)
 	{
 	case EditorState::EDITING:
-		UpdateEditor(p);
+		UpdateEditor();
 		break;
 
 	case EditorState::PLAYING:
-		UpdatePreview(p);
+		UpdatePreview();
 		break;
 
 	case EditorState::PAUSE_MENU:
@@ -54,9 +63,9 @@ void LevelEditor::Update(float dt, Player* p, Physics* phys)
 
 }
 
-void LevelEditor::Draw(Player* p, Physics* phys)
+void LevelEditor::Draw()
 {
-	phys->Draw(p->body);
+	phys->Draw(player->body);
 	DebugDraw();
 }
 
@@ -69,14 +78,19 @@ void LevelEditor::DebugDraw()
 
 void LevelEditor::CleanUp()
 {
+	delete phys;
+	delete player->body;
+	delete player;
 }
 
 //---------------------------------------------------------------------------------
 
-void LevelEditor::UpdateEditor(Player* p)
+void LevelEditor::UpdateEditor()
 {
 	CameraDisplace();
 	ScreenAddition();
+
+	TilePlacement();
 }
 
 void LevelEditor::CameraDisplace()
@@ -113,7 +127,45 @@ void LevelEditor::ScreenAddition()
 	}
 }
 
-void LevelEditor::UpdatePreview(Player* p)
+void LevelEditor::TilePlacement()
 {
-	p->PlayerControls();
+	if (tileSelect != 0 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		iPoint coord = GetCoordsFromMousePos();
+		GroundTile* gT = nullptr;
+
+		switch (tileSelect)
+		{
+		case 1:
+			gT = new GroundTile({float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE)}, coord, this);
+			tiles.Add(gT);
+			break;
+
+		case 2:
+			break;
+		}
+	}
+}
+
+iPoint LevelEditor::GetCoordsFromMousePos()
+{
+	iPoint pos = {};
+	iPoint coords = {};
+	app->input->GetMousePosition(pos.x, pos.y);
+
+	pos.x -= app->render->camera.x;
+	pos.y -= app->render->camera.y;
+
+	if (pos.x < 0) coords.x = floor(pos.x / TILE_SIZE) - 1;
+	else coords.x = floor(pos.x / TILE_SIZE);
+
+	if (pos.y < 0) coords.y = floor(pos.y / TILE_SIZE) - 1;
+	else coords.y = floor(pos.y / TILE_SIZE);
+
+	return coords;
+}
+
+void LevelEditor::UpdatePreview()
+{
+	player->PlayerControls();
 }
