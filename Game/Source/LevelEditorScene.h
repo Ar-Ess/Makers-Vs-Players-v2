@@ -24,6 +24,13 @@ enum class EditorState
 	PAUSE_MENU
 };
 
+enum class TileSelect
+{
+	NO_SELECT = 0,
+	ERASE,
+	GROUND
+};
+
 class LevelEditor
 {
 public:
@@ -46,10 +53,14 @@ private:
 
 	//EDITOR FUNCTIONS
 	void UpdateEditor();
+	void TileSelectionLogic();
 	void CameraDisplace();
 	void ScreenAddition();
 	void TilePlacement();
+	void TileRemove();
 	iPoint GetCoordsFromMousePos();
+	bool TileExistance(iPoint coords);
+	void DeleteTileFromCoords(iPoint coords);
 
 	//PREVIEW FUNCTIONS
 	void UpdatePreview();
@@ -65,7 +76,7 @@ private:
 	const int wTileScreen[11] = {0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240};
 	const int maxScreens = 10;
 
-	unsigned short int tileSelect = 1;
+	TileSelect tSelect = TileSelect::NO_SELECT;
 
 	EditorState state = EditorState::EDITING;
 };

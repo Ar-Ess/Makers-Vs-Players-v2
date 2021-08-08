@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "External/SDL/include/SDL.h"
 #include "Physics.h"
+#include "Textures.h"
 
 struct SDL_Texture;
 class LevelEditor;
@@ -21,7 +22,10 @@ public:
 
 	Tile() {}
 
-	virtual ~Tile() {}
+	virtual ~Tile() 
+	{
+		app->tex->UnLoad(texture);
+	}
 
 	Tile(iPoint pos, iPoint coords) {}
 

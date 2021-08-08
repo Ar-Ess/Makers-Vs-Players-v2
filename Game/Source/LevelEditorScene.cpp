@@ -65,6 +65,9 @@ void LevelEditor::Update(float dt)
 
 void LevelEditor::Draw()
 {
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next) list->data->Draw();
+
 	phys->Draw(player->body);
 	DebugDraw();
 }
@@ -87,10 +90,20 @@ void LevelEditor::CleanUp()
 
 void LevelEditor::UpdateEditor()
 {
+	TileSelectionLogic();
+
 	CameraDisplace();
 	ScreenAddition();
 
 	TilePlacement();
+	TileRemove();
+}
+
+void LevelEditor::TileSelectionLogic()
+{
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) tSelect = TileSelect::NO_SELECT;
+	if (app->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) tSelect = TileSelect::ERASE;
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) tSelect = TileSelect::GROUND;
 }
 
 void LevelEditor::CameraDisplace()
@@ -129,21 +142,32 @@ void LevelEditor::ScreenAddition()
 
 void LevelEditor::TilePlacement()
 {
-	if (tileSelect != 0 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if ((int)tSelect > 1 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		iPoint coord = GetCoordsFromMousePos();
 		GroundTile* gT = nullptr;
 
-		switch (tileSelect)
+		if (TileExistance(coord)) return;
+
+		switch (tSelect)
 		{
-		case 1:
+		case TileSelect::GROUND:
 			gT = new GroundTile({float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE)}, coord, this);
 			tiles.Add(gT);
 			break;
-
-		case 2:
-			break;
 		}
+	}
+}
+
+void LevelEditor::TileRemove()
+{
+	if (tSelect == TileSelect::ERASE && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		iPoint coord = GetCoordsFromMousePos();
+
+		if (!TileExistance(coord)) return;
+
+		DeleteTileFromCoords(coord);
 	}
 }
 
@@ -163,6 +187,29 @@ iPoint LevelEditor::GetCoordsFromMousePos()
 	else coords.y = floor(pos.y / TILE_SIZE);
 
 	return coords;
+}
+
+bool LevelEditor::TileExistance(iPoint coords)
+{
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next) if (list->data->coordinates == coords) return true;
+
+	return false;
+}
+
+void LevelEditor::DeleteTileFromCoords(iPoint coords)
+{
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next)
+	{
+		if (list->data->coordinates == coords)
+		{
+			delete list->data;
+			tiles.Del(list);
+			return;
+		}
+	}
+	return;
 }
 
 void LevelEditor::UpdatePreview()
