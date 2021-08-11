@@ -962,8 +962,8 @@ void Body::DeClipper(Body &body, Direction dir)
 			
 			if (currentBody->colliderType == RECTANGLE && body.colliderType == RECTANGLE)
 			{
-				//TOP & DOWN
-				if (currentBody->position.y + currentBody->rect.h >= body.position.y && !(currentBody->position.y >= body.position.y) && (currentBody->position.y + currentBody->rect.h <= body.position.y + body.rect.h))
+				//TOP & DOWN & LEFT & RIGHT
+				if ((currentBody->position.y + currentBody->rect.h > body.position.y) && (currentBody->position.y < body.position.y) && (currentBody->position.y + currentBody->rect.h < body.position.y + body.rect.h))
 				{
 					// Ground
 					currentBody->position.y = body.rect.y - currentBody->rect.h;
@@ -980,16 +980,14 @@ void Body::DeClipper(Body &body, Direction dir)
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 					if (currentBody->onDash) currentBody->onDash = false;
 				}
-				else if ((currentBody->position.y <= body.position.y + body.rect.h) && currentBody->position.y >= body.position.y && !(currentBody->position.y + currentBody->rect.h <= body.position.y + body.rect.h))
+				else if ((currentBody->position.y < body.position.y + body.rect.h) && (currentBody->position.y + currentBody->rect.h > body.position.y + body.rect.h) && (currentBody->position.y > body.position.y))
 				{
 					// Top
 					currentBody->position.y = body.rect.y + body.rect.h;
 					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
 					currentBody->onRoof = true;
 				}
-
-				//LEFT & RIGHT
-				if (dir == Direction::LEFT && (currentBody->position.x <= body.position.x + body.rect.w) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.rect.w))
+				else if (dir == Direction::LEFT && (currentBody->position.x < body.position.x + body.rect.w) && (currentBody->position.x > body.position.x) && (currentBody->position.x + currentBody->rect.w > body.position.x + body.rect.w))
 				{
 					// Left wall
 					currentBody->position.x = body.rect.x + body.rect.w;
@@ -997,8 +995,7 @@ void Body::DeClipper(Body &body, Direction dir)
 					currentBody->onLeftWall = true;
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 				}
-				
-				if (dir == Direction::RIGHT && (currentBody->position.x + currentBody->rect.w >= body.rect.x) && !(currentBody->position.x >= body.rect.x) && (currentBody->position.x + currentBody->rect.w <= body.rect.x + body.rect.w))
+				else if (dir == Direction::RIGHT && (currentBody->position.x + currentBody->rect.w > body.position.x) && (currentBody->position.x + currentBody->rect.w < body.position.x + body.rect.w) && (currentBody->position.x < body.position.x))
 				{
 					// Right wall
 					currentBody->position.x = body.rect.x - currentBody->rect.w;
