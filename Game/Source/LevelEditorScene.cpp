@@ -20,7 +20,7 @@ void LevelEditor::Start()
 {
 	phys = new Physics();
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	player->body = (DynamicBody*)phys->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 53, 53 }, { 0, 0 }, { 0, 0 }, 1.5f);
+	player->body = (DynamicBody*)phys->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 46, 53 }, { 0, 0 }, { 0, 0 }, 1.5f);
 	phys->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
 	phys->PausePhysics(true);
 	

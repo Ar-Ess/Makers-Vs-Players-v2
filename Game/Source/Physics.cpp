@@ -341,7 +341,7 @@ void Physics::Step(float dt)
 			}
 
 			// Check Colls
-			CheckCollisions(prevPosition);
+			CheckCollisions(dB, prevPosition);
 
 			// onAir check
 			if (!dB->onGround && !dB->onLeftWall && !dB->onRightWall && !dB->onRoof && !dB->onJump && !dB->onDoubleJump && !dB->onDash && !dB->onWallJump && !dB->onWater) dB->onAir = true;
@@ -580,45 +580,42 @@ void Physics::DestroyBody(Body* b)
 	bodyList.Del(bodyList.At(bodyList.Find(b)));
 }
 
-void Physics::CheckCollisions(fPoint prevPos)
+void Physics::CheckCollisions(Body* b, fPoint prevPos)
 {
 	ListItem<Body*>* bodyList1;
-	ListItem<Body*>* bodyList2;
 	for (bodyList1 = bodyList.start; bodyList1 != NULL; bodyList1 = bodyList1->next)
 	{
-		for (bodyList2 = bodyList.start; bodyList2 != NULL; bodyList2 = bodyList2->next)
+		if (bodyList1->data != b)
 		{
-			if (bodyList1->data != bodyList2->data)
-			{
-				bool collided = false;
-				if (bodyList1->data->colliderType == RECTANGLE && bodyList2->data->colliderType == RECTANGLE)
-				{
-					if (collisionUtil.CheckCollision(bodyList1->data->rect, bodyList2->data->rect))
-					{
-						collided = true;
-					}
-				}
-				else if (bodyList1->data->colliderType == CIRCLE && bodyList2->data->colliderType == RECTANGLE)
-				{
-					if (collisionUtil.CheckCollision(bodyList1->data->circle, bodyList2->data->rect))
-					{
-						collided = true;
-					}
-				}
-				else if (bodyList1->data->colliderType == RECTANGLE && bodyList2->data->colliderType == CIRCLE)
-				{
-					if (collisionUtil.CheckCollision(bodyList1->data->rect, bodyList2->data->circle)) collided = true;
-				}
-				else if (bodyList1->data->colliderType == CIRCLE && bodyList2->data->colliderType == CIRCLE)
-				{
-					if (collisionUtil.CheckCollision(bodyList1->data->circle, bodyList2->data->circle)) collided = true;
-				}
+			bool collided = false;
 
-				if (collided)
+			if (bodyList1->data->colliderType == RECTANGLE && b->colliderType == RECTANGLE)
+			{
+				if (collisionUtil.CheckCollision(bodyList1->data->rect, b->rect)) collided = true;
+			}
+			else if (bodyList1->data->colliderType == CIRCLE && b->colliderType == RECTANGLE)
+			{
+				if (collisionUtil.CheckCollision(bodyList1->data->circle, b->rect))
 				{
-					bodyList1->data->SolveCollision(*bodyList2->data);
-					bodyList2->data->SolveCollision(*bodyList1->data);
+					collided = true;
 				}
+			}
+			else if (bodyList1->data->colliderType == RECTANGLE && b->colliderType == CIRCLE)
+			{
+				if (collisionUtil.CheckCollision(bodyList1->data->rect, b->circle)) collided = true;
+			}
+			else if (bodyList1->data->colliderType == CIRCLE && b->colliderType == CIRCLE)
+			{
+				if (collisionUtil.CheckCollision(bodyList1->data->circle, b->circle)) collided = true;
+			}
+
+			if (collided)
+			{
+				Direction dir = DirectionDetection(b->GetPosition(), prevPos);
+				Direction invDir = InvertDirection(dir);
+
+				bodyList1->data->SolveCollision(*b, invDir);
+				b->SolveCollision(*bodyList1->data, dir);
 			}
 		}
 	}
@@ -641,6 +638,19 @@ Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
 	if (prevPos.x - currPos.x > 0)
 	{
 		return Direction::LEFT; //COLLIDING RIGHT TO LEFT
+	}
+
+	return Direction();
+}
+
+Direction Physics::InvertDirection(Direction dir)
+{
+	switch (dir)
+	{
+	case Direction::UP: return Direction::DOWN; break;
+	case Direction::DOWN: return Direction::UP; break;
+	case Direction::LEFT: return Direction::RIGHT; break;
+	case Direction::RIGHT: return Direction::LEFT; break;
 	}
 
 	return Direction();
@@ -936,12 +946,12 @@ void DynamicBody::ResetBools()
 	this->onRightWall = false;
 }
 
-void Body::SolveCollision(Body &body)
+void Body::SolveCollision(Body &body, Direction dir)
 {
-	this->DeClipper(body); // First declipp then do anything 
+	this->DeClipper(body, dir); // First declip, then do anything 
 }
 
-void Body::DeClipper(Body &body)
+void Body::DeClipper(Body &body, Direction dir)
 {
 	if (body.isCollidable)
 	{
@@ -979,7 +989,7 @@ void Body::DeClipper(Body &body)
 				}
 
 				//LEFT & RIGHT
-				if ((currentBody->position.x <= body.position.x + body.rect.w) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.rect.w))
+				if (dir == Direction::LEFT && (currentBody->position.x <= body.position.x + body.rect.w) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.rect.w))
 				{
 					// Left wall
 					currentBody->position.x = body.rect.x + body.rect.w;
@@ -987,7 +997,8 @@ void Body::DeClipper(Body &body)
 					currentBody->onLeftWall = true;
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 				}
-				else if ((currentBody->position.x + currentBody->rect.w >= body.position.x) && !(currentBody->position.x >= body.position.x))
+				
+				if (dir == Direction::RIGHT && (currentBody->position.x + currentBody->rect.w >= body.rect.x) && !(currentBody->position.x >= body.rect.x) && (currentBody->position.x + currentBody->rect.w <= body.rect.x + body.rect.w))
 				{
 					// Right wall
 					currentBody->position.x = body.rect.x - currentBody->rect.w;

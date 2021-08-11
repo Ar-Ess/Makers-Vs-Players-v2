@@ -160,8 +160,8 @@ public: //Getters
 
 protected:
 	friend class Physics;
-	void SolveCollision(Body& body);
-	void DeClipper(Body& body);
+	void SolveCollision(Body& body, Direction dir);
+	void DeClipper(Body& body, Direction dir);
 	double ToPositiveAngle(double angle);
 
 	SDL_Rect rect;
@@ -320,8 +320,9 @@ private:
 	// Debug
 	void Step(float dt);
 	void Integrate(DynamicBody* item, float dt);
-	void CheckCollisions(fPoint prevPos);
+	void CheckCollisions(Body* body, fPoint prevPos);
 	Direction DirectionDetection(fPoint currPos, fPoint prevPos);
+	Direction InvertDirection(Direction dir);
 	void ChangeGravityAcceleration(fPoint acceleration);
 	void ChangeRestitutionCoeficient(fPoint restCoeficient);
 	void ChangeFrictionCoeficient(fPoint frictCoeficient);
