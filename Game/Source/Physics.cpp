@@ -319,6 +319,8 @@ void Physics::Step(float dt)
 			// Applying gravity acceleration post second law newton
 			dB->acceleration += dB->gravityAcceleration;
 
+			fPoint prevPosition = dB->position;
+
 			// Integrate
 			Integrate(dB, dt);
 
@@ -339,7 +341,7 @@ void Physics::Step(float dt)
 			}
 
 			// Check Colls
-			CheckCollisions();
+			CheckCollisions(prevPosition);
 
 			// onAir check
 			if (!dB->onGround && !dB->onLeftWall && !dB->onRightWall && !dB->onRoof && !dB->onJump && !dB->onDoubleJump && !dB->onDash && !dB->onWallJump && !dB->onWater) dB->onAir = true;
@@ -573,7 +575,12 @@ void Physics::ResetAllForces()
 	}
 }
 
-void Physics::CheckCollisions()
+void Physics::DestroyBody(Body* b)
+{
+	bodyList.Del(bodyList.At(bodyList.Find(b)));
+}
+
+void Physics::CheckCollisions(fPoint prevPos)
 {
 	ListItem<Body*>* bodyList1;
 	ListItem<Body*>* bodyList2;
@@ -615,6 +622,28 @@ void Physics::CheckCollisions()
 			}
 		}
 	}
+}
+
+Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
+{
+	if (prevPos.y - currPos.y < 0)
+	{
+		return Direction::DOWN; //COLLIDING UP TO DOWN
+	}
+	if (prevPos.x - currPos.x < 0)
+	{
+		return Direction::RIGHT; //COLLIDING LEFT TO RIGHT
+	}
+	if (prevPos.y - currPos.y > 0)
+	{
+		return Direction::UP; //COLLIDING DOWN TO UP
+	}
+	if (prevPos.x - currPos.x > 0)
+	{
+		return Direction::LEFT; //COLLIDING RIGHT TO LEFT
+	}
+
+	return Direction();
 }
 
 Body* Physics::CreateBody(BodyType bodyType_, fPoint position_ , SDL_Rect rect_, fPoint velocity_, fPoint gravity_, float mass_)

@@ -25,6 +25,7 @@ public:
 	virtual ~Tile() 
 	{
 		app->tex->UnLoad(texture);
+		texture = nullptr;
 	}
 
 	Tile(iPoint pos, iPoint coords) {}
@@ -35,6 +36,8 @@ public:
 	{
 		return coordinates;
 	}
+
+	virtual Body* GetBody() { return nullptr; };
 
 public:
 

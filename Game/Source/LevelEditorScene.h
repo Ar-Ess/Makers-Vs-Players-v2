@@ -57,10 +57,10 @@ private:
 	void CameraDisplace();
 	void ScreenAddition();
 	void TilePlacement();
-	void TileRemove();
+	void TileRemoveLogic();
 	iPoint GetCoordsFromMousePos();
 	bool TileExistance(iPoint coords);
-	void DeleteTileFromCoords(iPoint coords);
+	void DeleteTile(iPoint coords);
 
 	//PREVIEW FUNCTIONS
 	void UpdatePreview();

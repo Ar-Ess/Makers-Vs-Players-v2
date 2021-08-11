@@ -22,7 +22,7 @@ GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE)
 
 GroundTile::~GroundTile()
 {
-	app->tex->UnLoad(texture);
+	delete body;
 }
 
 void GroundTile::Draw()

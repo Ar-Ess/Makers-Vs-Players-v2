@@ -309,6 +309,8 @@ public:
 	void PausePhysics(bool pause);
 	//Resets to 0 all forces, velocities, accelerations applied to any existing dynamic body
 	void ResetAllForces();
+	//Destroys de body setted as an input of this function
+	void DestroyBody(Body* b);
 
 public:
 	bool debug = true;
@@ -318,7 +320,8 @@ private:
 	// Debug
 	void Step(float dt);
 	void Integrate(DynamicBody* item, float dt);
-	void CheckCollisions();
+	void CheckCollisions(fPoint prevPos);
+	Direction DirectionDetection(fPoint currPos, fPoint prevPos);
 	void ChangeGravityAcceleration(fPoint acceleration);
 	void ChangeRestitutionCoeficient(fPoint restCoeficient);
 	void ChangeFrictionCoeficient(fPoint frictCoeficient);

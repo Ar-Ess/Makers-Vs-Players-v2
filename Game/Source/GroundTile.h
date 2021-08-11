@@ -30,6 +30,11 @@ public: //Functions
 		return body->ReturnBodyRect();
 	}
 
+	Body* GetBody()
+	{
+		return (Body*)body;
+	}
+
 private:
 
 	SDL_Rect groundSprite[15] = { { 0, 0, 53, 53 }, { 53, 0, 53, 53 }, { 106, 0, 53, 53 },

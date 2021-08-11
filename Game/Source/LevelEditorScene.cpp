@@ -96,7 +96,7 @@ void LevelEditor::UpdateEditor()
 	ScreenAddition();
 
 	TilePlacement();
-	TileRemove();
+	TileRemoveLogic();
 }
 
 void LevelEditor::TileSelectionLogic()
@@ -159,7 +159,7 @@ void LevelEditor::TilePlacement()
 	}
 }
 
-void LevelEditor::TileRemove()
+void LevelEditor::TileRemoveLogic()
 {
 	if (tSelect == TileSelect::ERASE && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
@@ -167,7 +167,7 @@ void LevelEditor::TileRemove()
 
 		if (!TileExistance(coord)) return;
 
-		DeleteTileFromCoords(coord);
+		DeleteTile(coord);
 	}
 }
 
@@ -197,13 +197,14 @@ bool LevelEditor::TileExistance(iPoint coords)
 	return false;
 }
 
-void LevelEditor::DeleteTileFromCoords(iPoint coords)
+void LevelEditor::DeleteTile(iPoint coords)
 {
 	ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next)
 	{
 		if (list->data->coordinates == coords)
 		{
+			phys->DestroyBody(list->data->GetBody());
 			delete list->data;
 			tiles.Del(list);
 			return;
