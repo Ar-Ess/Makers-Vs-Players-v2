@@ -7,7 +7,7 @@
 #include "SString.h"
 #include "Animation.h"
 
-#include "Collider.h"
+#include "Utils.h"
 
 #include "SDL/include/SDL.h"
 
@@ -78,7 +78,7 @@ private:
     int dialog;
     int direction;
 
-    Collision collisionUtils;
+    Utils collisionUtils;
 
     bool active;
 };

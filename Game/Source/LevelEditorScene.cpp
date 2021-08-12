@@ -8,6 +8,8 @@
 #include "Render.h"
 #include "GroundTile.h"
 
+#include "Log.h"
+
 LevelEditor::LevelEditor()
 {
 }
@@ -25,6 +27,7 @@ void LevelEditor::Start()
 	phys->PausePhysics(true);
 	
 	app->render->camera = {INIT_CAM_X, -INIT_CAM_Y };
+	player->Start();
 	state = EditorState::EDITING;
 }
 
@@ -50,17 +53,16 @@ void LevelEditor::Update(float dt)
 	switch (state)
 	{
 	case EditorState::EDITING:
-		UpdateEditor();
+		UpdateEditor(dt);
 		break;
 
 	case EditorState::PLAYING:
-		UpdatePreview();
+		UpdatePreview(dt);
 		break;
 
 	case EditorState::PAUSE_MENU:
 		break;
 	}
-
 }
 
 void LevelEditor::Draw()
@@ -88,12 +90,13 @@ void LevelEditor::CleanUp()
 
 //---------------------------------------------------------------------------------
 
-void LevelEditor::UpdateEditor()
+void LevelEditor::UpdateEditor(float dt)
 {
 	TileSelectionLogic();
 
 	CameraDisplace();
 	ScreenAddition();
+	PlayerDragLogic();
 
 	TilePlacement();
 	TileRemoveLogic();
@@ -108,24 +111,42 @@ void LevelEditor::TileSelectionLogic()
 
 void LevelEditor::CameraDisplace()
 {
+	fPoint pos = player->body->GetPosition();
+
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		if (app->render->camera.y < 0) app->render->camera.y += CAM_VEL;
+		if (app->render->camera.y < 0)
+		{
+			app->render->camera.y += CAM_VEL;
+			player->UpdatePosition({(int)pos.x, (int)pos.y - CAM_VEL});
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		if (app->render->camera.y > -INIT_CAM_Y) app->render->camera.y -= CAM_VEL;
+		if (app->render->camera.y > -INIT_CAM_Y)
+		{
+			app->render->camera.y -= CAM_VEL;
+			player->UpdatePosition({ (int)pos.x, (int)pos.y + CAM_VEL });
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		if (app->render->camera.x < 0) app->render->camera.x += CAM_VEL;
+		if (app->render->camera.x < 0)
+		{
+			app->render->camera.x += CAM_VEL;
+			player->UpdatePosition({ (int)pos.x - CAM_VEL, (int)pos.y});
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		if (app->render->camera.x > -(TILE_SIZE * (wTileScreen[currScreen]))) app->render->camera.x -= CAM_VEL;
+		if (app->render->camera.x > -(TILE_SIZE * (wTileScreen[currScreen])))
+		{
+			app->render->camera.x -= CAM_VEL;
+			player->UpdatePosition({ (int)pos.x + CAM_VEL, (int)pos.y });
+		}
 	}
 }
 
@@ -213,7 +234,62 @@ void LevelEditor::DeleteTile(iPoint coords)
 	return;
 }
 
-void LevelEditor::UpdatePreview()
+void LevelEditor::PlayerDragLogic()
 {
-	player->PlayerControls();
+	iPoint pos = {};
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && IsMouseInPlayer())
+	{
+		tSelect = TileSelect::NO_SELECT;
+		player->dragged = true;
+
+		// GetMousePosInTile
+		app->input->GetMousePosition(pos.x, pos.y);
+		utils.ApplyCameraPosition(pos.x, pos.y);
+		
+		deltaPosition = GetMousePosInPlayer(pos);
+		pos -= deltaPosition;
+	}
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && player->dragged)
+	{
+		app->input->GetMousePosition(pos.x, pos.y);
+		utils.ApplyCameraPosition(pos.x, pos.y);
+
+		pos -= deltaPosition;
+	}
+	else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && player->dragged) player->dragged = false;
+
+	if (player->dragged)
+	{
+		SDL_Rect cam = app->render->camera;
+		if (utils.CheckCollision(player->body->ReturnBodyRect(), {-cam.x, -cam.y, 1280, 720})) player->UpdatePosition(pos);
+
+		if (player->body->GetPosition().x < -cam.x) player->UpdatePosition({-cam.x, pos.y});
+
+		int maxW = -cam.x + 1280 - player->body->GetMagnitudes().x;
+		if (player->body->GetPosition().x > maxW) player->UpdatePosition({ maxW, pos.y });
+
+		if (player->body->GetPosition().y < -cam.y) player->UpdatePosition({ pos.x, -cam.y });
+
+		int maxH = -cam.y + 720 - player->body->GetMagnitudes().y;
+		if (player->body->GetPosition().y > maxH) player->UpdatePosition({ pos.x, maxH });
+	}
+}
+
+bool LevelEditor::IsMouseInPlayer()
+{
+	iPoint pos = {};
+	app->input->GetMousePosition(pos.x, pos.y);
+	utils.ApplyCameraPosition(pos.x, pos.y);
+
+	return utils.CheckCollision(player->body->ReturnBodyRect(), {pos.x, pos.y, 1, 1});
+}
+
+iPoint LevelEditor::GetMousePosInPlayer(iPoint pos)
+{
+	return iPoint(pos.x - (int)player->body->GetPosition().x, pos.y - (int)player->body->GetPosition().y);
+}
+
+void LevelEditor::UpdatePreview(float dt)
+{
+	player->Update(dt);
 }

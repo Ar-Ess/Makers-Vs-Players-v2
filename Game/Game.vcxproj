@@ -171,6 +171,7 @@
     <ClInclude Include="Source\Tile.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\Transition.h" />
+    <ClInclude Include="Source\Utils.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />

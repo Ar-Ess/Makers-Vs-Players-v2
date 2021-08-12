@@ -2,7 +2,7 @@
 #define __PHYSICS_H__
 
 #include "Module.h"
-#include "Collider.h"
+#include "Utils.h"
 #include "List.h"
 #include "Log.h"
 #include "Point.h"
@@ -160,6 +160,8 @@ public: //Getters
 
 protected:
 	friend class Physics;
+	friend class Player;
+
 	void SolveCollision(Body& body, Direction dir);
 	void DeClipper(Body& body, Direction dir);
 	double ToPositiveAngle(double angle);
@@ -239,7 +241,10 @@ public:
 	void ResetForces();
 
 private:
+
 	friend class Physics;
+	friend class Player;
+
 	void SecondNewton();
 	void ApplyFriction(float dt);
 	void ApplyBuoyancy();
@@ -247,6 +252,7 @@ private:
 	void ResetBools();
 
 private:
+
 	friend class Body;
 	friend class Physics;
 	fPoint velocity;
@@ -332,7 +338,7 @@ private:
 
 private:
 	List<Body*> bodyList;
-	Collision collisionUtil;
+	Utils collisionUtil;
 	fPoint globalGravity = {};
 	fPoint globalRestitution = {};
 	fPoint globalFriction = {};

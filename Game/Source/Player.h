@@ -20,6 +20,8 @@ public:
 
     Player();
 
+    bool Start();
+
     bool Update(float dt);
 
     bool Draw();
@@ -37,15 +39,19 @@ public:
         return collision;
     }
 
-public: //Characteristics
+private: //Characteristics
 
+    friend class LevelEditor;
+
+    void UpdatePosition(iPoint pos);
 
 public:
+
     SDL_Texture* texture = nullptr;
     DynamicBody* body = nullptr;
 
-public:
     bool godMode = false;
+    bool dragged = false;
 };
 
 #endif // __PLAYER_H__

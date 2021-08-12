@@ -12,6 +12,7 @@
 
 #include "List.h"
 #include "Point.h"
+#include "Utils.h"
 
 class Player;
 class Physics;
@@ -52,7 +53,7 @@ public:
 private:
 
 	//EDITOR FUNCTIONS
-	void UpdateEditor();
+	void UpdateEditor(float dt);
 	void TileSelectionLogic();
 	void CameraDisplace();
 	void ScreenAddition();
@@ -61,9 +62,12 @@ private:
 	iPoint GetCoordsFromMousePos();
 	bool TileExistance(iPoint coords);
 	void DeleteTile(iPoint coords);
+	void PlayerDragLogic();
+	bool IsMouseInPlayer();
+	iPoint GetMousePosInPlayer(iPoint pos);
 
 	//PREVIEW FUNCTIONS
-	void UpdatePreview();
+	void UpdatePreview(float dt);
 
 public:
 	Physics* phys = nullptr;
@@ -75,10 +79,11 @@ private:
 	int currScreen = 0;
 	const int wTileScreen[11] = {0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240};
 	const int maxScreens = 10;
+	iPoint deltaPosition = {};
 
 	TileSelect tSelect = TileSelect::NO_SELECT;
-
 	EditorState state = EditorState::EDITING;
+	Utils utils;
 };
 
 #endif // __LEVEL_EDITOR_H__
