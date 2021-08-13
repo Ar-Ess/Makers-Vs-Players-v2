@@ -91,7 +91,7 @@ void LevelEditor::DrawBackground()
 	short int lowVel = app->render->camera.x / 25;
 	short int midVel = app->render->camera.x / 15;
 	int camX = -app->render->camera.x;
-	int camYmid = (app->render->camera.y + INIT_CAM_Y) / 8;
+	int camYmid = (app->render->camera.y + INIT_CAM_Y) / 9;
 	int camYlow = (app->render->camera.y + INIT_CAM_Y) / 13;
 
 	if (camX < bgSize) app->render->DrawTexture(background[0], (bgSize * 0), 0, 1, 1, (SDL_Rect*)0, false);
