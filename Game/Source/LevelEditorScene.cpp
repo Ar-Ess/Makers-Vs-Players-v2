@@ -29,6 +29,10 @@ void LevelEditor::Start()
 	app->render->camera = {INIT_CAM_X, -INIT_CAM_Y };
 	player->Start();
 	state = EditorState::EDITING;
+
+	background[0] = app->tex->Load("Assets/Textures/Background/sky_bg.png");
+	background[1] = app->tex->Load("Assets/Textures/Background/sky_move1_bg.png");
+	background[2] = app->tex->Load("Assets/Textures/Background/sky_move2_bg.png");
 }
 
 void LevelEditor::Update(float dt)
@@ -67,11 +71,38 @@ void LevelEditor::Update(float dt)
 
 void LevelEditor::Draw()
 {
+	DrawBackground();
+
 	ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next) list->data->Draw();
 
-	phys->Draw(player->body);
 	DebugDraw();
+	phys->Draw(player->body);
+}
+
+void LevelEditor::DrawBackground()
+{
+	unsigned short int bgSize = 2608;
+	unsigned short int camWidth = 1280;
+	SDL_Rect bgEnd = { 0, 0, 2297, 917 };
+
+	short int lowVel = app->render->camera.x / 25;
+	short int midVel = app->render->camera.x / 15;
+	int camX = -app->render->camera.x;
+
+	if (camX < bgSize) app->render->DrawTexture(background[0], (bgSize * 0), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > ((bgSize * 1) - camWidth) && camX < (bgSize * 2)) app->render->DrawTexture(background[0], (bgSize * 1), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > ((bgSize * 2) - camWidth) && camX < (bgSize * 3)) app->render->DrawTexture(background[0], (bgSize * 2), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > ((bgSize * 3) - camWidth) && camX < (bgSize * 4)) app->render->DrawTexture(background[0], (bgSize * 3), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > ((bgSize * 4) - camWidth) && camX < (bgSize * 5)) app->render->DrawTexture(background[0], (bgSize * 4), 0, 1, 1, &bgEnd, false);
+
+	if (camX < 2550) app->render->DrawTexture(background[1], lowVel, 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 1278 && camX < 4200) app->render->DrawTexture(background[1], lowVel + (bgSize * 1), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 3788 && camX < 8000) app->render->DrawTexture(background[1], lowVel + (bgSize * 2), 0, 1, 1, (SDL_Rect*)0, false);
+
+	app->render->DrawTexture(background[2], midVel, 0, 1, 1, (SDL_Rect*)0, false);
+
+	LOG("X: %d", -camX);
 }
 
 void LevelEditor::DebugDraw()
@@ -86,6 +117,8 @@ void LevelEditor::CleanUp()
 	delete phys;
 	delete player->body;
 	delete player;
+
+	for (int i = 0; i < 3; i++) app->tex->UnLoad(background[i]);
 }
 
 //---------------------------------------------------------------------------------
@@ -119,6 +152,7 @@ void LevelEditor::CameraDisplace()
 		{
 			app->render->camera.y += CAM_VEL;
 			player->UpdatePosition({(int)pos.x, (int)pos.y - CAM_VEL});
+			pos = player->body->GetPosition();
 		}
 	}
 
@@ -128,6 +162,7 @@ void LevelEditor::CameraDisplace()
 		{
 			app->render->camera.y -= CAM_VEL;
 			player->UpdatePosition({ (int)pos.x, (int)pos.y + CAM_VEL });
+			pos = player->body->GetPosition();
 		}
 	}
 
@@ -137,6 +172,7 @@ void LevelEditor::CameraDisplace()
 		{
 			app->render->camera.x += CAM_VEL;
 			player->UpdatePosition({ (int)pos.x - CAM_VEL, (int)pos.y});
+			pos = player->body->GetPosition();
 		}
 	}
 

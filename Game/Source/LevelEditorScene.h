@@ -17,6 +17,7 @@
 class Player;
 class Physics;
 class Tile;
+struct SDL_Texture;
 
 enum class EditorState
 {
@@ -49,6 +50,10 @@ public:
 	void DebugDraw();
 
 	void CleanUp();
+
+public:
+
+	void DrawBackground();
 
 private:
 
@@ -84,6 +89,8 @@ private:
 	TileSelect tSelect = TileSelect::NO_SELECT;
 	EditorState state = EditorState::EDITING;
 	Utils utils;
+
+	SDL_Texture* background[3] = {nullptr, nullptr, nullptr};
 };
 
 #endif // __LEVEL_EDITOR_H__
