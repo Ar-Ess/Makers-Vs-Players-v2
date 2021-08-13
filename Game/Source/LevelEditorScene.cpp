@@ -113,8 +113,6 @@ void LevelEditor::DrawBackground()
 	if (camX > 6129 && camX < 9830) app->render->DrawTexture(background[2], midVel + (bgSize * 3), camYmid, 1, 1, (SDL_Rect*)0, false);
 	if (camX > 8568) app->render->DrawTexture(background[2], midVel + (bgSize * 4), camYmid, 1, 1, (SDL_Rect*)0, false);
 	if (camX > 11025) app->render->DrawTexture(background[2], midVel + (bgSize * 5), camYmid, 1, 1, &bg2End, false);
-
-	LOG("X: %d", -camX);
 }
 
 void LevelEditor::DebugDraw()
