@@ -85,10 +85,14 @@ void LevelEditor::DrawBackground()
 	unsigned short int bgSize = 2608;
 	unsigned short int camWidth = 1280;
 	SDL_Rect bgEnd = { 0, 0, 2297, 917 };
+	SDL_Rect bg1End = { 0, 0, 145, 1106 };
+	SDL_Rect bg2End = { 0, 0, 451, 1431 };
 
 	short int lowVel = app->render->camera.x / 25;
 	short int midVel = app->render->camera.x / 15;
 	int camX = -app->render->camera.x;
+	int camYmid = (app->render->camera.y + INIT_CAM_Y) / 8;
+	int camYlow = (app->render->camera.y + INIT_CAM_Y) / 13;
 
 	if (camX < bgSize) app->render->DrawTexture(background[0], (bgSize * 0), 0, 1, 1, (SDL_Rect*)0, false);
 	if (camX > ((bgSize * 1) - camWidth) && camX < (bgSize * 2)) app->render->DrawTexture(background[0], (bgSize * 1), 0, 1, 1, (SDL_Rect*)0, false);
@@ -96,11 +100,19 @@ void LevelEditor::DrawBackground()
 	if (camX > ((bgSize * 3) - camWidth) && camX < (bgSize * 4)) app->render->DrawTexture(background[0], (bgSize * 3), 0, 1, 1, (SDL_Rect*)0, false);
 	if (camX > ((bgSize * 4) - camWidth) && camX < (bgSize * 5)) app->render->DrawTexture(background[0], (bgSize * 4), 0, 1, 1, &bgEnd, false);
 
-	if (camX < 2550) app->render->DrawTexture(background[1], lowVel, 0, 1, 1, (SDL_Rect*)0, false);
-	if (camX > 1278 && camX < 4200) app->render->DrawTexture(background[1], lowVel + (bgSize * 1), 0, 1, 1, (SDL_Rect*)0, false);
-	if (camX > 3788 && camX < 8000) app->render->DrawTexture(background[1], lowVel + (bgSize * 2), 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX < 2550) app->render->DrawTexture(background[1], lowVel, -camYlow, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 1278 && camX < 5020) app->render->DrawTexture(background[1], lowVel + (bgSize * 1), -camYlow, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 3788 && camX < 7560) app->render->DrawTexture(background[1], lowVel + (bgSize * 2), -camYlow, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 6291 && camX < 10030) app->render->DrawTexture(background[1], lowVel + (bgSize * 3), -camYlow, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 8802) app->render->DrawTexture(background[1], lowVel + (bgSize * 4), -camYlow, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 11304) app->render->DrawTexture(background[1], lowVel + (bgSize * 5), -camYlow, 1, 1, &bg1End, false);
 
-	app->render->DrawTexture(background[2], midVel, 0, 1, 1, (SDL_Rect*)0, false);
+	if (camX < 2500) app->render->DrawTexture(background[2], midVel, camYmid, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 1242 && camX < 4920) app->render->DrawTexture(background[2], midVel + (bgSize * 1), camYmid, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 3690 && camX < 7410) app->render->DrawTexture(background[2], midVel + (bgSize * 2), camYmid, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 6129 && camX < 9830) app->render->DrawTexture(background[2], midVel + (bgSize * 3), camYmid, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 8568) app->render->DrawTexture(background[2], midVel + (bgSize * 4), camYmid, 1, 1, (SDL_Rect*)0, false);
+	if (camX > 11025) app->render->DrawTexture(background[2], midVel + (bgSize * 5), camYmid, 1, 1, &bg2End, false);
 
 	LOG("X: %d", -camX);
 }

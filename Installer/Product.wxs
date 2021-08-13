@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <!-- STEP 0 -->
-	<Product Id="*" Name="Game_Name" Language="1033" Version="1.0.0.0" Manufacturer="STUDIO_NAME" UpgradeCode="8d82de04-1824-4225-bed2-8f04526e95b4">
+	<Product Id="*" Name="Makers_Vs_Players" Language="1033" Version="1.0.0.0" Manufacturer="Sound_Desk_Studio" UpgradeCode="8d82de04-1824-4225-bed2-8f04526e95b4">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of Game_Name is already installed." />
+		<MajorUpgrade DowngradeErrorMessage="A newer version of Makers Vs. Players is already installed." />
 		<MediaTemplate />
     
     <!-- STEP 5 -->
@@ -39,8 +39,8 @@
     <DirectoryRef Id="ApplicationProgramsFolder">
       <Component Id="StartMenuShortcut" Guid="ea2fc581-b635-4278-a8f1-1a81320d803a">
         <Shortcut Id="ApplicationStartMenuShortcut"
-               Name="Game_Name"
-               Description="Game Description..."
+               Name="Makers Vs. Players"
+               Description="A game where, finally, makers can get revenge on players and speedrunners."
                Target="[#Game_Name.exe]"
                WorkingDirectory="INSTALLFOLDER"
                Icon = "icon.ico"/><!-- STEP 4 -->
@@ -53,8 +53,8 @@
     <DirectoryRef Id="DesktopFolder">
       <Component Id="DesktopShortcut" Guid="c0f4eeec-8988-4c58-8a0a-2ebac04e2a2a">
         <Shortcut Id="ApplicationDesktopShortcut"
-               Name="Game_Name"
-               Description="Game Description..."
+               Name="Makers Vs. Players"
+               Description="A game where, finally, makers can get revenge on players and speedrunners."
                Target="[#Game_Name.exe]"
                WorkingDirectory="INSTALLFOLDER"
                Icon = "icon.ico"/><!-- STEP 4 -->
@@ -71,16 +71,16 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
       
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Game_Name" />
+				<Directory Id="INSTALLFOLDER" Name="Makers Vs. Players" />
 			</Directory>
 
       <!-- STEP 2 -->
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="Game_Name"/>
+        <Directory Id="ApplicationProgramsFolder" Name="Makers Vs. Players"/>
       </Directory>
       
       <!-- STEP 3 -->
-      <Directory Id="DesktopFolder" Name="Game_Name" />
+      <Directory Id="DesktopFolder" Name="Makers Vs. Players" />
 
     </Directory>
   </Fragment>
