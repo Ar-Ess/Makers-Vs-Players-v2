@@ -40,16 +40,15 @@ void LevelEditor::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		if ((int)state == 0)
+		switch (state)
 		{
-			phys->PausePhysics(false);
-			phys->ResetAllForces();
-			state = EditorState::PLAYING;
-		}
-		else if ((int)state == 1)
-		{
-			phys->PausePhysics(true);
-			state = EditorState::EDITING;
+		case EditorState::EDITING: 
+			ChangeEditorState(EditorState::PLAYING); 
+			break;
+
+		case EditorState::PLAYING: 
+			ChangeEditorState(EditorState::EDITING); 
+			break;
 		}
 	}
 
@@ -154,6 +153,26 @@ void LevelEditor::LoadBackgroundImages()
 		background[1] = app->tex->Load("Assets/Textures/Background/noon_move1_bg.png");
 		background[2] = app->tex->Load("Assets/Textures/Background/noon_move2_bg.png");
 		background[3] = app->tex->Load("Assets/Textures/Background/noon_sun_bg.png");
+		break;
+	}
+}
+
+void LevelEditor::ChangeEditorState(EditorState newState)
+{
+	switch (newState)
+	{
+	case EditorState::EDITING:
+		phys->PausePhysics(true);
+		state = newState;
+		break;
+
+	case EditorState::PLAYING:
+		phys->PausePhysics(false);
+		phys->ResetAllForces();
+		state = newState;
+		break;
+
+	case EditorState::PAUSE_MENU:
 		break;
 	}
 }
@@ -411,4 +430,17 @@ void LevelEditor::ChangeTilesetLogic()
 void LevelEditor::UpdatePreview(float dt)
 {
 	player->Update(dt);
+
+	//ALWAYS END
+	ReplaceEditPlayer();
+}
+
+void LevelEditor::ReplaceEditPlayer()
+{
+	iPoint pos = { (int)player->body->GetPosition().x, (int)player->body->GetPosition().y };
+	if (pos.y > -app->render->camera.y + 720 + 100)
+	{
+		ChangeEditorState(EditorState::EDITING);
+		player->UpdatePosition({ pos.x, -app->render->camera.y + 360 });
+	}
 }

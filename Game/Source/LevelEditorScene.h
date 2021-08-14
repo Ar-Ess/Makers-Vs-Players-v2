@@ -67,6 +67,7 @@ public:
 public:
 
 	void LoadBackgroundImages();
+	void ChangeEditorState(EditorState state);
 	Background GetBackground() const
 	{
 		return bg;
@@ -91,6 +92,7 @@ private:
 
 	//PREVIEW FUNCTIONS
 	void UpdatePreview(float dt);
+	void ReplaceEditPlayer();
 
 public:
 	Physics* phys = nullptr;
