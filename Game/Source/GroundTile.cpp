@@ -12,7 +12,17 @@ GroundTile::GroundTile()
 
 GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE)
 {
-	texture = app->tex->Load("Assets/Textures/Tilesets/ground_tileset.png");
+	switch (lE->GetBackground())
+	{
+	case Background::SKY: 
+		texture = app->tex->Load("Assets/Textures/Tilesets/ground_sky_tileset.png"); 
+		break;
+
+	case Background::NOON:
+		texture = app->tex->Load("Assets/Textures/Tilesets/ground_noon_tileset.png");
+		break;
+	}
+
 	position = pos;
 	coordinates = coords;
 	editor = lE;

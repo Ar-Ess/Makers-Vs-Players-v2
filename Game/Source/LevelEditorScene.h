@@ -4,11 +4,16 @@
 #define TILE_SIZE 53
 #define TILE_PER_SCREEN_W 24
 #define TILE_PER_SCREEN_H 27
+
 #define INIT_CAM_X 0
 #define INIT_CAM_Y 711
+
 #define MAX_SCREEN_X 12720
 #define MAX_SCREEN_Y 1431
+
 #define CAM_VEL 9
+
+#define MAX_BACKGROUND 2
 
 #include "List.h"
 #include "Point.h"
@@ -33,6 +38,12 @@ enum class TileSelect
 	GROUND
 };
 
+enum class Background
+{
+	SKY = 1,
+	NOON
+};
+
 class LevelEditor
 {
 public:
@@ -47,13 +58,19 @@ public:
 
 	void Draw();
 
+	void DrawBackground();
+
 	void DebugDraw();
 
 	void CleanUp();
 
 public:
 
-	void DrawBackground();
+	void LoadBackgroundImages();
+	Background GetBackground() const
+	{
+		return bg;
+	}
 
 private:
 
@@ -70,6 +87,7 @@ private:
 	void PlayerDragLogic();
 	bool IsMouseInPlayer();
 	iPoint GetMousePosInPlayer(iPoint pos);
+	void ChangeTilesetLogic();
 
 	//PREVIEW FUNCTIONS
 	void UpdatePreview(float dt);
@@ -88,9 +106,10 @@ private:
 
 	TileSelect tSelect = TileSelect::NO_SELECT;
 	EditorState state = EditorState::EDITING;
+	Background bg = Background::SKY;
 	Utils utils;
 
-	SDL_Texture* background[3] = {nullptr, nullptr, nullptr};
+	SDL_Texture* background[4] = {nullptr, nullptr, nullptr, nullptr};
 };
 
 #endif // __LEVEL_EDITOR_H__

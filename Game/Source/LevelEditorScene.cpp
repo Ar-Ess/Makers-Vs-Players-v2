@@ -29,10 +29,9 @@ void LevelEditor::Start()
 	app->render->camera = {INIT_CAM_X, -INIT_CAM_Y };
 	player->Start();
 	state = EditorState::EDITING;
+	bg = Background::SKY;
 
-	background[0] = app->tex->Load("Assets/Textures/Background/sky_bg.png");
-	background[1] = app->tex->Load("Assets/Textures/Background/sky_move1_bg.png");
-	background[2] = app->tex->Load("Assets/Textures/Background/sky_move2_bg.png");
+	LoadBackgroundImages();
 }
 
 void LevelEditor::Update(float dt)
@@ -90,6 +89,8 @@ void LevelEditor::DrawBackground()
 
 	short int lowVel = app->render->camera.x / 25;
 	short int midVel = app->render->camera.x / 15;
+	short int sunVel = (-app->render->camera.x / 1.245f) + 400;
+
 	int camX = -app->render->camera.x;
 	int camYmid = (app->render->camera.y + INIT_CAM_Y) / 9;
 	int camYlow = (app->render->camera.y + INIT_CAM_Y) / 13;
@@ -99,6 +100,8 @@ void LevelEditor::DrawBackground()
 	if (camX > ((bgSize * 2) - camWidth) && camX < (bgSize * 3)) app->render->DrawTexture(background[0], (bgSize * 2), 0, 1, 1, (SDL_Rect*)0, false);
 	if (camX > ((bgSize * 3) - camWidth) && camX < (bgSize * 4)) app->render->DrawTexture(background[0], (bgSize * 3), 0, 1, 1, (SDL_Rect*)0, false);
 	if (camX > ((bgSize * 4) - camWidth) && camX < (bgSize * 5)) app->render->DrawTexture(background[0], (bgSize * 4), 0, 1, 1, &bgEnd, false);
+
+	if (bg == Background::NOON) app->render->DrawTexture(background[3], sunVel, -camYmid, 1, 1, (SDL_Rect*)0, false);
 
 	if (camX < 2550) app->render->DrawTexture(background[1], lowVel, -camYlow, 1, 1, (SDL_Rect*)0, false);
 	if (camX > 1278 && camX < 5020) app->render->DrawTexture(background[1], lowVel + (bgSize * 1), -camYlow, 1, 1, (SDL_Rect*)0, false);
@@ -128,7 +131,31 @@ void LevelEditor::CleanUp()
 	delete player->body;
 	delete player;
 
-	for (int i = 0; i < 3; i++) app->tex->UnLoad(background[i]);
+	for (int i = 0; i < 4; i++)
+	{
+		app->tex->UnLoad(background[i]);
+		background[i] = nullptr;
+	}
+}
+
+void LevelEditor::LoadBackgroundImages()
+{
+	switch (bg)
+	{
+	case Background::SKY:
+		background[0] = app->tex->Load("Assets/Textures/Background/sky_bg.png");
+		background[1] = app->tex->Load("Assets/Textures/Background/sky_move1_bg.png");
+		background[2] = app->tex->Load("Assets/Textures/Background/sky_move2_bg.png");
+		background[3] = nullptr;
+		break;
+
+	case Background::NOON:
+		background[0] = app->tex->Load("Assets/Textures/Background/noon_bg.png");
+		background[1] = app->tex->Load("Assets/Textures/Background/noon_move1_bg.png");
+		background[2] = app->tex->Load("Assets/Textures/Background/noon_move2_bg.png");
+		background[3] = app->tex->Load("Assets/Textures/Background/noon_sun_bg.png");
+		break;
+	}
 }
 
 //---------------------------------------------------------------------------------
@@ -136,6 +163,7 @@ void LevelEditor::CleanUp()
 void LevelEditor::UpdateEditor(float dt)
 {
 	TileSelectionLogic();
+	ChangeTilesetLogic();
 
 	CameraDisplace();
 	ScreenAddition();
@@ -333,6 +361,51 @@ bool LevelEditor::IsMouseInPlayer()
 iPoint LevelEditor::GetMousePosInPlayer(iPoint pos)
 {
 	return iPoint(pos.x - (int)player->body->GetPosition().x, pos.y - (int)player->body->GetPosition().y);
+}
+
+void LevelEditor::ChangeTilesetLogic()
+{
+	if (app->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_DOWN)
+	{
+		bg = (Background)(((int)bg) + 1);
+		if ((int)bg > MAX_BACKGROUND) bg = (Background)1;
+
+		for (int i = 0; i < 4; i++)
+		{
+			app->tex->UnLoad(background[i]);
+			background[i] = nullptr;
+		}
+
+		ListItem<Tile*>* item;
+		for (item = tiles.start; item != NULL; item = item->next)
+		{
+			app->tex->UnLoad(item->data->texture);
+			item->data->texture = nullptr;
+
+			switch (bg)
+			{
+			case Background::SKY:
+				switch (item->data->type)
+				{
+				case TileType::GROUND:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/ground_sky_tileset.png");
+					break;
+				}
+				break;
+
+			case Background::NOON:
+				switch (item->data->type)
+				{
+				case TileType::GROUND:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/ground_noon_tileset.png");
+					break;
+				}
+				break;
+			}
+		}
+
+		LoadBackgroundImages();
+	}
 }
 
 void LevelEditor::UpdatePreview(float dt)
