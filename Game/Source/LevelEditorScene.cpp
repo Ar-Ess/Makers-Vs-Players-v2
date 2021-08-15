@@ -419,6 +419,10 @@ void LevelEditor::ChangeTilesetLogic()
 				case TileType::GROUND:
 					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/ground_sky_tileset.png");
 					break;
+
+				case TileType::COIN:
+					item->data->texture = app->tex->Load("Assets/Textures/Items/coin_sky_item.png");
+					break;
 				}
 				break;
 
@@ -428,11 +432,14 @@ void LevelEditor::ChangeTilesetLogic()
 				case TileType::GROUND:
 					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/ground_noon_tileset.png");
 					break;
+
+				case TileType::COIN:
+					item->data->texture = app->tex->Load("Assets/Textures/Items/coin_noon_item.png");
+					break;
 				}
 				break;
 			}
 		}
-
 		LoadBackgroundImages();
 	}
 }

@@ -15,7 +15,18 @@ Coin::Coin(fPoint pos, iPoint coords, LevelEditor* lE)
 	type = TileType::COIN;
 	state = CoinState::COIN;
 	editor = lE;
-	texture = app->tex->Load("Assets/Textures/Items/item_coin.png");
+
+	switch (lE->GetBackground())
+	{
+	case Background::SKY:
+		texture = app->tex->Load("Assets/Textures/Items/coin_sky_item.png");
+		break;
+
+	case Background::NOON:
+		texture = app->tex->Load("Assets/Textures/Items/coin_noon_item.png");
+		break;
+	}
+
 	rect = {(int)pos.x + 12, (int)pos.y + 6, 53 - 24, 53 - 12};
 
 	for (int i = 0; i < 9; i++) coinAnim.PushBack({53 * i, 0, 53, 53});
