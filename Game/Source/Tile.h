@@ -13,7 +13,8 @@ struct SDL_Rect;
 enum class TileType
 {
 	NO_TILE = 0,
-	GROUND
+	GROUND,
+	COIN
 };
 
 class Tile

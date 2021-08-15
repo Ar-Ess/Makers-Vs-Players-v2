@@ -188,15 +188,15 @@ void LevelEditor::UpdateEditor(float dt)
 	ScreenAddition();
 	PlayerDragLogic();
 
-	TilePlacement();
+	SelectionPlacement();
 	TileRemoveLogic();
 }
 
 void LevelEditor::TileSelectionLogic()
 {
-	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) tSelect = TileSelect::NO_SELECT;
-	if (app->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) tSelect = TileSelect::ERASE;
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) tSelect = TileSelect::GROUND;
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) select = Selection::NO_SELECT;
+	if (app->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) select = Selection::ERASE;
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) select = Selection::GROUND;
 }
 
 void LevelEditor::CameraDisplace()
@@ -254,18 +254,18 @@ void LevelEditor::ScreenAddition()
 	}
 }
 
-void LevelEditor::TilePlacement()
+void LevelEditor::SelectionPlacement()
 {
-	if ((int)tSelect > 1 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	if ((int)select > 1 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		iPoint coord = GetCoordsFromMousePos();
 		GroundTile* gT = nullptr;
 
 		if (TileExistance(coord)) return;
 
-		switch (tSelect)
+		switch (select)
 		{
-		case TileSelect::GROUND:
+		case Selection::GROUND:
 			gT = new GroundTile({float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE)}, coord, this);
 			tiles.Add(gT);
 			break;
@@ -275,7 +275,7 @@ void LevelEditor::TilePlacement()
 
 void LevelEditor::TileRemoveLogic()
 {
-	if (tSelect == TileSelect::ERASE && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	if (select == Selection::ERASE && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		iPoint coord = GetCoordsFromMousePos();
 
@@ -332,7 +332,7 @@ void LevelEditor::PlayerDragLogic()
 	iPoint pos = {};
 	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && IsMouseInPlayer())
 	{
-		tSelect = TileSelect::NO_SELECT;
+		select = Selection::NO_SELECT;
 		player->dragged = true;
 
 		// GetMousePosInTile

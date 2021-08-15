@@ -31,11 +31,12 @@ enum class EditorState
 	PAUSE_MENU
 };
 
-enum class TileSelect
+enum class Selection
 {
 	NO_SELECT = 0,
 	ERASE,
-	GROUND
+	GROUND,
+	COIN
 };
 
 enum class Background
@@ -80,7 +81,7 @@ private:
 	void TileSelectionLogic();
 	void CameraDisplace();
 	void ScreenAddition();
-	void TilePlacement();
+	void SelectionPlacement();
 	void TileRemoveLogic();
 	iPoint GetCoordsFromMousePos();
 	bool TileExistance(iPoint coords);
@@ -106,7 +107,7 @@ private:
 	const int maxScreens = 10;
 	iPoint deltaPosition = {};
 
-	TileSelect tSelect = TileSelect::NO_SELECT;
+	Selection select = Selection::NO_SELECT;
 	EditorState state = EditorState::EDITING;
 	Background bg = Background::SKY;
 	Utils utils;

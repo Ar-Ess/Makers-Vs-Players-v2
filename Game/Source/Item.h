@@ -9,8 +9,8 @@ class Item : public Entity
 {
 public:
 
-    Item();
-    virtual ~Item();
+    Item() : Entity(EntityType::ITEM) {};
+    virtual ~Item() {};
 };
 
 #endif // __ITEM_H__

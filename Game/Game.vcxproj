@@ -107,7 +107,7 @@
     <ClCompile Include="Source\GuiManager.cpp" />
     <ClCompile Include="Source\GuiSlider.cpp" />
     <ClCompile Include="Source\GuiString.cpp" />
-    <ClCompile Include="Source\Item.cpp" />
+    <ClCompile Include="Source\Coin.cpp" />
     <ClCompile Include="Source\LevelEditorScene.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
@@ -130,6 +130,7 @@
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\AssetsManager.h" />
     <ClInclude Include="Source\Boss.h" />
+    <ClInclude Include="Source\Coin.h" />
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Dialogue.h" />
     <ClInclude Include="Source\DialogueManager.h" />
