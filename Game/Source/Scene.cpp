@@ -157,7 +157,7 @@ void Scene::UpdateMainMenu(float dt)
 void Scene::UpdateLevelEditor(float dt)
 {
 	levelEditor->Update(dt);
-	levelEditor->Draw();
+	levelEditor->Draw(dt);
 }
 
 // GUI CONTROLS

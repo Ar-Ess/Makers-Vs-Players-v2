@@ -5,6 +5,7 @@
 #include "External/SDL/include/SDL.h"
 #include "Physics.h"
 #include "Textures.h"
+#include "Utils.h"
 
 struct SDL_Texture;
 class LevelEditor;
@@ -23,15 +24,19 @@ public:
 
 	Tile() {}
 
+	Tile(iPoint pos, iPoint coords) {}
+
 	virtual ~Tile() 
 	{
 		app->tex->UnLoad(texture);
 		texture = nullptr;
 	}
 
-	Tile(iPoint pos, iPoint coords) {}
+	virtual void Update(float dt) {}
 
-	virtual void Draw() {}
+	virtual void Draw(float dt) {}
+
+	virtual void Restart() {}
 
 	virtual iPoint GetCoords() const
 	{
@@ -47,6 +52,8 @@ public:
 	TileType type = TileType::NO_TILE;
 	fPoint position;
 	iPoint coordinates;
+	Utils utils;
+	bool debug = false;
 
 };
 

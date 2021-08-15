@@ -18,7 +18,11 @@ public: //Functions
 
 	~GroundTile();
 
-	void Draw();
+	void Update(float dt);
+
+	void Draw(float dt);
+
+	void Restart();
 
 	iPoint GetCoords() const
 	{

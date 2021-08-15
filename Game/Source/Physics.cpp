@@ -47,13 +47,13 @@ bool Physics::Update(float dt)
 		if (globalFrictionActive) ChangeFrictionCoeficient(globalFriction);
 
 		Step(dt);
+	}
 
 		if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 			debug = !debug;
 
 		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 			debugBools = !debugBools;
-	}
 
 	return true;
 }
@@ -139,59 +139,59 @@ void Physics::DebugBools(DynamicBody* dB)
 	bool air = false;
 	bool water = false;
 
-	if (dynamicProps) app->render->DrawRectangle({ 0, 0, 360, 135 }, {180, 180, 180, 200});
-	else app->render->DrawRectangle({ 0, 0, 180, 135 }, { 180, 180, 180, 200 });
+	if (dynamicProps) app->render->DrawRectangle({ 0, 0, 360, 135 }, {180, 180, 180, 200}, true, false);
+	else app->render->DrawRectangle({ 0, 0, 180, 135 }, { 180, 180, 180, 200 }, true, false);
 
 	GuiString* n = (GuiString*)app->guiManager->CreateGuiControl(GuiControlType::TEXT);
 	n->SetTextFont(app->fontTTF->defaultFont);
 
 	n->bounds = { 5, 10, 25, 15 };
 	n->SetString("GND:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 35;
 	n->SetString("LWL:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 60;
 	n->SetString("RWL:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 85;
 	n->SetString(" RF:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 110;
 	n->SetString("AIR:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds = { 85, 10, 25, 15 };
 	n->SetString("JMP:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 35;
 	n->SetString("DJP:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 60;
 	n->SetString("WJP:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 85;
 	n->SetString("DSH:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	n->bounds.y = 110;
 	n->SetString("WTR:", BLACK);
-	n->Draw();
+	n->Draw(1, 1, false);
 	if (dynamicProps)
 	{
 		n->bounds = { 165, 10, 25, 15 };
 		char posStr[40] = {};
 		sprintf(posStr, "POS: %.2f %.2f", dB->position.x, dB->position.y);
 		n->SetString(posStr, BLACK);
-		n->Draw();
+		n->Draw(1, 1, false);
 		n->bounds.y = 35;
 		char velStr[40] = {};
 		sprintf(velStr, "VEL: %.2f %.2f", dB->velocity.x, dB->velocity.y);
 		n->SetString(velStr, BLACK);
-		n->Draw();
+		n->Draw(1, 1, false);
 		n->bounds.y = 60;
 		char accStr[40] = {};
 		sprintf(accStr, "ACC: %.2f %.2f", ((dB->velocity.x / app->GetDeltaTime()) * dB->mass), ((dB->velocity.y / app->GetDeltaTime()) * dB->mass));
 		n->SetString(accStr, BLACK);
-		n->Draw();
+		n->Draw(1, 1, false);
 	}
 
 	n->Delete();
@@ -209,61 +209,61 @@ void Physics::DebugBools(DynamicBody* dB)
 			DynamicBody* dB = (DynamicBody*)list->data;
 			if (dB->onGround && !ground)
 			{
-				app->render->DrawRectangle({ xOff, 10 - yOff, 25, 15 }, { 255, 0, 0, 255 });
+				app->render->DrawRectangle({ xOff, 10 - yOff, 25, 15 }, { 255, 0, 0, 255 }, true, false);
 				ground = true;
 			}
 			
 			if (dB->onLeftWall && !lWall)
 			{
-				app->render->DrawRectangle({ xOff, 35 - yOff, 25, 15 }, { 0, 255, 0, 255 });
+				app->render->DrawRectangle({ xOff, 35 - yOff, 25, 15 }, { 0, 255, 0, 255 }, true, false);
 				lWall = true;
 			}
 
 			if (dB->onRightWall && !rWall)
 			{
-				app->render->DrawRectangle({ xOff, 60 - yOff, 25, 15 }, { 255, 255, 0, 255 });
+				app->render->DrawRectangle({ xOff, 60 - yOff, 25, 15 }, { 255, 255, 0, 255 }, true, false);
 				rWall = true;
 			}
 			
 			if (dB->onRoof && !roof)
 			{
-				app->render->DrawRectangle({ xOff, 85 - yOff, 25, 15 }, { 0, 0, 255, 255 });
+				app->render->DrawRectangle({ xOff, 85 - yOff, 25, 15 }, { 0, 0, 255, 255 }, true, false);
 				roof = true;
 			}
 
 			if (dB->onAir && !air)
 			{
-				app->render->DrawRectangle({ xOff, 110 - yOff, 25, 15 }, { 225, 105, 55, 255 });
+				app->render->DrawRectangle({ xOff, 110 - yOff, 25, 15 }, { 225, 105, 55, 255 }, true, false);
 				air = true;
 			}
 
 			if (dB->onJump && !jump)
 			{
-				app->render->DrawRectangle({ xOff1, 10 - yOff, 25, 15 }, { 0, 255, 255, 255 });
+				app->render->DrawRectangle({ xOff1, 10 - yOff, 25, 15 }, { 0, 255, 255, 255 }, true, false);
 				jump = true;
 			}
 
 			if (dB->onDoubleJump && !doubleJump)
 			{
-				app->render->DrawRectangle({ xOff1, 35 - yOff, 25, 15 }, { 255, 0, 255, 255 });
+				app->render->DrawRectangle({ xOff1, 35 - yOff, 25, 15 }, { 255, 0, 255, 255 }, true, false);
 				doubleJump = true;
 			}
 
 			if (dB->onWallJump && !wallJump)
 			{
-				app->render->DrawRectangle({ xOff1, 60 - yOff, 25, 15 }, { 255, 255, 255, 255 });
+				app->render->DrawRectangle({ xOff1, 60 - yOff, 25, 15 }, { 255, 255, 255, 255 }, true, false);
 				wallJump = true;
 			}
 
 			if (dB->onDash && !dash)
 			{
-				app->render->DrawRectangle({ xOff1, 85 - yOff, 25, 15 }, { 225, 55, 105, 255 });
+				app->render->DrawRectangle({ xOff1, 85 - yOff, 25, 15 }, { 225, 55, 105, 255 }, true, false);
 				dash = true;
 			}
 
 			if (dB->onWater && !water)
 			{
-				app->render->DrawRectangle({ xOff1, 110 - yOff, 25, 15 }, { 55, 225, 105, 255 });
+				app->render->DrawRectangle({ xOff1, 110 - yOff, 25, 15 }, { 55, 225, 105, 255 }, true, false);
 				water = true;
 			}
 		}

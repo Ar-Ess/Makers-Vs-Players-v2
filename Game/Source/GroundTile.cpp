@@ -35,7 +35,12 @@ GroundTile::~GroundTile()
 	delete body;
 }
 
-void GroundTile::Draw()
+void GroundTile::Update(float dt)
+{
+	return;
+}
+
+void GroundTile::Draw(float dt)
 {
 	iPoint upTile = { coordinates.x, coordinates.y - 1 };
 	iPoint downTile = { coordinates.x, coordinates.y + 1 };
@@ -169,4 +174,9 @@ void GroundTile::Draw()
 	{
 		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[4]);
 	}
+}
+
+void GroundTile::Restart()
+{
+	return;
 }

@@ -57,7 +57,7 @@ public:
 
 	void Update(float dt);
 
-	void Draw();
+	void Draw(float dt);
 
 	void DrawBackground();
 
@@ -72,6 +72,10 @@ public:
 	Background GetBackground() const
 	{
 		return bg;
+	}
+	EditorState GetState() const
+	{
+		return state;
 	}
 
 private:

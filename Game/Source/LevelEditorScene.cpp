@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "GroundTile.h"
+#include "Coin.h"
 
 #include "Log.h"
 
@@ -67,12 +68,12 @@ void LevelEditor::Update(float dt)
 	}
 }
 
-void LevelEditor::Draw()
+void LevelEditor::Draw(float dt)
 {
 	DrawBackground();
 
 	ListItem<Tile*>* list;
-	for (list = tiles.start; list != nullptr; list = list->next) list->data->Draw();
+	for (list = tiles.start; list != nullptr; list = list->next) list->data->Draw(dt);
 
 	DebugDraw();
 	phys->Draw(player->body);
@@ -159,10 +160,12 @@ void LevelEditor::LoadBackgroundImages()
 
 void LevelEditor::ChangeEditorState(EditorState newState)
 {
+	ListItem<Tile*>* list;
 	switch (newState)
 	{
 	case EditorState::EDITING:
 		phys->PausePhysics(true);
+		for (list = tiles.start; list != nullptr; list = list->next) list->data->Restart();
 		state = newState;
 		break;
 
@@ -197,6 +200,7 @@ void LevelEditor::TileSelectionLogic()
 	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) select = Selection::NO_SELECT;
 	if (app->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) select = Selection::ERASE;
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) select = Selection::GROUND;
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) select = Selection::COIN;
 }
 
 void LevelEditor::CameraDisplace()
@@ -260,6 +264,7 @@ void LevelEditor::SelectionPlacement()
 	{
 		iPoint coord = GetCoordsFromMousePos();
 		GroundTile* gT = nullptr;
+		Coin* c = nullptr;
 
 		if (TileExistance(coord)) return;
 
@@ -268,6 +273,11 @@ void LevelEditor::SelectionPlacement()
 		case Selection::GROUND:
 			gT = new GroundTile({float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE)}, coord, this);
 			tiles.Add(gT);
+			break;
+
+		case Selection::COIN:
+			c = new Coin({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this);
+			tiles.Add(c);
 			break;
 		}
 	}
@@ -318,7 +328,7 @@ void LevelEditor::DeleteTile(iPoint coords)
 	{
 		if (list->data->coordinates == coords)
 		{
-			phys->DestroyBody(list->data->GetBody());
+			if (list->data->GetBody() != nullptr) phys->DestroyBody(list->data->GetBody());
 			delete list->data;
 			tiles.Del(list);
 			return;
@@ -430,6 +440,9 @@ void LevelEditor::ChangeTilesetLogic()
 void LevelEditor::UpdatePreview(float dt)
 {
 	player->Update(dt);
+
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next) list->data->Update(dt);
 
 	//ALWAYS END
 	ReplaceEditPlayer();

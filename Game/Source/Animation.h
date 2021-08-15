@@ -57,7 +57,7 @@ public:
 		}
 	}
 
-	const SDL_Rect& GetCurrentFrame() const
+	SDL_Rect& GetCurrentFrame()
 	{
 		int actualFrame = currentFrame;
 		if (pingpongDirection == -1)
@@ -66,7 +66,7 @@ public:
 		return frames[actualFrame];
 	}
 
-	void GenerateAnimation(const SDL_Rect& rect, int rows, int columns)
+	void GenerateAnimation(SDL_Rect& rect, int rows, int columns)
 	{
 
 		int frameWidth = rect.w / columns;
@@ -91,7 +91,7 @@ public:
 		return totalFrames;
 	}
 
-	const SDL_Rect GetLastFrame() const
+	SDL_Rect GetLastFrame() const
 	{
 		return frames[totalFrames - 1];
 	}

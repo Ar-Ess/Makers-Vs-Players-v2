@@ -319,7 +319,7 @@ public:
 	void DestroyBody(Body* b);
 
 public:
-	bool debug = true;
+	bool debug = false;
 	bool debugBools = false;
 
 private:
