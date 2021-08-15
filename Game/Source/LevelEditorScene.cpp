@@ -8,6 +8,7 @@
 #include "Render.h"
 #include "GroundTile.h"
 #include "Coin.h"
+#include "BrickTile.h"
 
 #include "Log.h"
 
@@ -201,6 +202,7 @@ void LevelEditor::TileSelectionLogic()
 	if (app->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) select = Selection::ERASE;
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) select = Selection::GROUND;
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) select = Selection::COIN;
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) select = Selection::BRICK;
 }
 
 void LevelEditor::CameraDisplace()
@@ -265,6 +267,7 @@ void LevelEditor::SelectionPlacement()
 		iPoint coord = GetCoordsFromMousePos();
 		GroundTile* gT = nullptr;
 		Coin* c = nullptr;
+		BrickTile* bT = nullptr;
 
 		if (TileExistance(coord)) return;
 
@@ -278,6 +281,11 @@ void LevelEditor::SelectionPlacement()
 		case Selection::COIN:
 			c = new Coin({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this);
 			tiles.Add(c);
+			break;
+
+		case Selection::BRICK:
+			bT = new BrickTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this);
+			tiles.Add(bT);
 			break;
 		}
 	}
@@ -423,6 +431,10 @@ void LevelEditor::ChangeTilesetLogic()
 				case TileType::COIN:
 					item->data->texture = app->tex->Load("Assets/Textures/Items/coin_sky_item.png");
 					break;
+
+				case TileType::BRICK:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/brick_sky_tileset.png");
+					break;
 				}
 				break;
 
@@ -435,6 +447,10 @@ void LevelEditor::ChangeTilesetLogic()
 
 				case TileType::COIN:
 					item->data->texture = app->tex->Load("Assets/Textures/Items/coin_noon_item.png");
+					break;
+
+				case TileType::BRICK:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/brick_noon_tileset.png");
 					break;
 				}
 				break;

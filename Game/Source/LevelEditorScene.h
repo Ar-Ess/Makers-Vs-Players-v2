@@ -36,7 +36,8 @@ enum class Selection
 	NO_SELECT = 0,
 	ERASE,
 	GROUND,
-	COIN
+	COIN,
+	BRICK
 };
 
 enum class Background

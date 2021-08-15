@@ -157,6 +157,11 @@ public: //Getters
 
 		return {0, 0, 0, 0};
 	}
+	//This function changes the state of collision of a body. If true inputed, body will have collision, and viceversa
+	void SetCollidable(bool collidable)
+	{
+		isCollidable = collidable;
+	}
 
 protected:
 	friend class Physics;

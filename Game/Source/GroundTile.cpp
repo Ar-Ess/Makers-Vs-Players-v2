@@ -80,99 +80,99 @@ void GroundTile::Draw(float dt)
 
 	if (!up && left && !down && !right) //No Diagonal
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[3]);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[3]);
 	}
 	else if (up && !left && !down && !right) //No Diagonal
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[3], true, true, 90);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[3], true, true, 90);
 	}
 	else if (!up && !left && down && !right) //No Diagonal
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[3], true, true, -90);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[3], true, true, -90);
 	}
 	else if (!up && !left && !down && right) //No Diagonal
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[3], true, true, 180);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[3], true, true, 180);
 	}
 	else if (!up && left && down && !right) //Diagonal DownL
 	{
-		if (downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[2]);
-		else if (!downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[11], true, true, -90);
+		if (downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[2]);
+		else if (!downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[11], true, true, -90);
 	}
 	else if (up && left && !down && !right) //Diagonal UpL
 	{
-		if (upL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[2], true, true, 90);
-		else if (!upL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[11]);
+		if (upL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[2], true, true, 90);
+		else if (!upL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[11]);
 	}
 	else if (up && !left && !down && right) //Diagonal UpR
 	{
-		if (upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[2], true, true, 180);
-		else if (!upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[11], true, true, 90);
+		if (upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[2], true, true, 180);
+		else if (!upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[11], true, true, 90);
 	}
 	else if (!up && !left && down && right) //Diagonal DownR
 	{
-		if (downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[2], true, true, -90);
-		else if (!downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[11], true, true, 180);
+		if (downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[2], true, true, -90);
+		else if (!downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[11], true, true, 180);
 	}
 	else if (!up && left && down && right) //Diagonal DownL, DownR, Both
 	{
-		if (downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[0]);
-		else if (downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[8], true, true, 180);
-		else if (!downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[9], true, true, 180);
-		else if (!downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[10], true, true, 180);
+		if (downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[0]);
+		else if (downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[8], true, true, 180);
+		else if (!downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[9], true, true, 180);
+		else if (!downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[10], true, true, 180);
 	}
 	else if (up && !left && down && right) //Diagonal UpR, DownR, Both
 	{
-		if (upR && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[0], true, true, -90);
-		else if (upR && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[9], true, true, 90);
-		else if (!upR && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[8], true, true, 90);
-		else if (!upR && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[10], true, true, 90);
+		if (upR && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[0], true, true, -90);
+		else if (upR && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[9], true, true, 90);
+		else if (!upR && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[8], true, true, 90);
+		else if (!upR && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[10], true, true, 90);
 	}
 	else if (up && left && !down && right) //Diagonal UpL, UpR, Both
 	{
-		if (upL && upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[0], true, true, 180);
-		else if (upL && !upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[9]);
-		else if (!upL && upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[8]);
-		else if (!upL && !upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[10]);
+		if (upL && upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[0], true, true, 180);
+		else if (upL && !upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[9]);
+		else if (!upL && upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[8]);
+		else if (!upL && !upR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[10]);
 	}
 	else if (up && left && down && !right) //Diagonal UpL, DownL, Both
 	{
-		if (upL && downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[0], true, true, 90);
-		else if (upL && !downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[8], true, true, -90);
-		else if (!upL && downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[9], true, true, -90);
-		else if (!upL && !downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[10], true, true, -90);
+		if (upL && downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[0], true, true, 90);
+		else if (upL && !downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[8], true, true, -90);
+		else if (!upL && downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[9], true, true, -90);
+		else if (!upL && !downL) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[10], true, true, -90);
 	}
 	else if (up & left & down & right)
 	{
-		if (upL && upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[1]);
-		else if (!upL && upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[6]);
-		else if (upL && !upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[6], true, true, 90);
-		else if (upL && upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[6], true, true, -90);
-		else if (upL && upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[6], true, true, 180);
-		else if (!upL && !upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[12]);
-		else if (upL && !upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[12], true, true, 180);
-		else if (!upL && upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[12], true, true, -90);
-		else if (!upL && !upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[12], true, true, 90);
-		else if (upL && !upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[14], true, true, 90);
-		else if (!upL && upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[14]);
-		else if (!upL && !upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[7]);
-		else if (upL && upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[7], true, true, 180);
-		else if (!upL && upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[7], true, true, -90);
-		else if (upL && !upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[7], true, true, 90);
-		else if (!upL && !upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[13]);
+		if (upL && upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[1]);
+		else if (!upL && upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[6]);
+		else if (upL && !upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[6], true, true, 90);
+		else if (upL && upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[6], true, true, -90);
+		else if (upL && upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[6], true, true, 180);
+		else if (!upL && !upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[12]);
+		else if (upL && !upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[12], true, true, 180);
+		else if (!upL && upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[12], true, true, -90);
+		else if (!upL && !upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[12], true, true, 90);
+		else if (upL && !upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[14], true, true, 90);
+		else if (!upL && upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[14]);
+		else if (!upL && !upR && downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[7]);
+		else if (upL && upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[7], true, true, 180);
+		else if (!upL && upR && !downL && downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[7], true, true, -90);
+		else if (upL && !upR && downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[7], true, true, 90);
+		else if (!upL && !upR && !downL && !downR) app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[13]);
 
 	}
 	else if (!up & left & !down & right)
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[5]);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[5]);
 	}
 	else if (up & !left & down & !right)
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[5], true, true, 90);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[5], true, true, 90);
 	}
 	else
 	{
-		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &groundSprite[4]);
+		app->render->DrawTexture(texture, position.x, position.y, 1, 1, &sprites[4]);
 	}
 }
 

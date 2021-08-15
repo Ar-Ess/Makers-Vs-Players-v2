@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="Source\AssetsManager.cpp" />
     <ClCompile Include="Source\Boss.cpp" />
+    <ClCompile Include="Source\BrickTile.cpp" />
     <ClCompile Include="Source\Dialogue.cpp" />
     <ClCompile Include="Source\DialogueManager.cpp" />
     <ClCompile Include="Source\EasingFunctions.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\AssetsManager.h" />
     <ClInclude Include="Source\Boss.h" />
+    <ClInclude Include="Source\BrickTile.h" />
     <ClInclude Include="Source\Coin.h" />
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Dialogue.h" />

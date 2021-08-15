@@ -90,37 +90,40 @@ void Physics::DebugDraw()
 		CircleCollider circx;
 		CircleCollider circ;
 
-		switch (list->data->colliderType)
+		if (list->data->isCollidable)
 		{
-		case CollisionType::RECTANGLE:
-			rectx = { list->data->rect };
-			rect = { METERS_TO_PIXELS(rectx.x), METERS_TO_PIXELS(rectx.y), METERS_TO_PIXELS(rectx.w), METERS_TO_PIXELS(rectx.h) };
-
-			switch (list->data->bodyType)
+			switch (list->data->colliderType)
 			{
-			case BodyType::DYNAMIC_BODY:
-				app->render->DrawRectangle(rect, { 255, 200, 0, 150 });
+			case CollisionType::RECTANGLE:
+				rectx = { list->data->rect };
+				rect = { METERS_TO_PIXELS(rectx.x), METERS_TO_PIXELS(rectx.y), METERS_TO_PIXELS(rectx.w), METERS_TO_PIXELS(rectx.h) };
+
+				switch (list->data->bodyType)
+				{
+				case BodyType::DYNAMIC_BODY:
+					app->render->DrawRectangle(rect, { 255, 200, 0, 150 });
+					break;
+				case BodyType::STATIC_BODY:
+					app->render->DrawRectangle(rect, { 255, 0, 0, 150 });
+					break;
+				}
 				break;
-			case BodyType::STATIC_BODY:
-				app->render->DrawRectangle(rect, { 255, 0, 0, 150 });
+
+			case CollisionType::CIRCLE:
+				circx = list->data->circle;
+				circ = { (float)METERS_TO_PIXELS(circx.x), (float)METERS_TO_PIXELS(circx.y), (float)METERS_TO_PIXELS(circx.radius) };
+
+				switch (list->data->bodyType)
+				{
+				case BodyType::DYNAMIC_BODY:
+					app->render->DrawCircle(circ, { 255, 200, 0, 150 });
+					break;
+				case BodyType::STATIC_BODY:
+					app->render->DrawCircle(circ, { 255, 0, 0, 150 });
+					break;
+				}
 				break;
 			}
-			break;
-
-		case CollisionType::CIRCLE:
-			circx = list->data->circle;
-			circ = {(float)METERS_TO_PIXELS(circx.x), (float)METERS_TO_PIXELS(circx.y), (float)METERS_TO_PIXELS(circx.radius)};
-
-			switch (list->data->bodyType)
-			{
-			case BodyType::DYNAMIC_BODY:
-				app->render->DrawCircle(circ, { 255, 200, 0, 150 });
-				break;
-			case BodyType::STATIC_BODY:
-				app->render->DrawCircle(circ, { 255, 0, 0, 150 });
-				break;
-			}
-			break;
 		}
 	}
 }

@@ -111,6 +111,9 @@
     <ClCompile Include="Source\Coin.cpp">
       <Filter>Entities\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BrickTile.cpp">
+      <Filter>Entities\Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="Source\Item.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BrickTile.h">
+      <Filter>Entities\Tiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,12 +5,14 @@
 #include "Animation.h"
 #include "Point.h"
 
+#define P_SWITCH_TIME 400
+
 struct SDL_Rect;
 
 enum class CoinState
 {
     COIN,
-    BLOCK,
+    BRICK,
     COLLECTED
 };
 
@@ -34,7 +36,12 @@ private:
     CoinState state = CoinState::COIN;
     Animation coinAnim;
     SDL_Rect rect = {};
+    StaticBody* body = nullptr;
 
+    unsigned short int timer = 0;
+    bool pSwitch = false;
+
+    SDL_Rect brickSprites[4] = { {0, 0, 53, 53}, {53, 0, 53, 53}, {106, 0, 53, 53}, {159, 0, 53, 53} };
 };
 
 #endif // __COIN_H__

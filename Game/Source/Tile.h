@@ -15,7 +15,8 @@ enum class TileType
 {
 	NO_TILE = 0,
 	GROUND,
-	COIN
+	COIN,
+	BRICK
 };
 
 class Tile
@@ -24,7 +25,7 @@ public:
 
 	Tile() {}
 
-	Tile(iPoint pos, iPoint coords) {}
+	Tile(fPoint pos, iPoint coords) {}
 
 	virtual ~Tile() 
 	{
