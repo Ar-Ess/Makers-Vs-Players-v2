@@ -95,6 +95,7 @@ void Coin::Draw(float dt)
 	bool left = false;
 	bool right = false;
 	ListItem<Tile*>* list;
+	Coin* c = nullptr;
 
 	switch (state)
 	{
@@ -112,7 +113,8 @@ void Coin::Draw(float dt)
 
 		for (list = editor->tiles.start; list != nullptr; list = list->next)
 		{
-			if (list->data->type == TileType::COIN)
+			c = (Coin*)list->data;
+			if (list->data->type == TileType::COIN && c->state != CoinState::COLLECTED)
 			{
 				if (list->data->coordinates == leftTile) left = true;
 				if (list->data->coordinates == rightTile) right = true;

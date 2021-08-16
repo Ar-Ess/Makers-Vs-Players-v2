@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "LevelEditorScene.h"
 #include "Textures.h"
+#include "Player.h"
 
 BrickTile::BrickTile()
 {
@@ -44,6 +45,8 @@ BrickTile::~BrickTile()
 
 void BrickTile::Update(float dt)
 {
+	if (state == BrickState::COIN && utils.CheckCollision(rect, editor->player->body->ReturnBodyRect())) state = BrickState::COLLECTED;
+
 	if (state != BrickState::COLLECTED && !pSwitch && app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 	{
 		pSwitch = true;
@@ -68,8 +71,11 @@ void BrickTile::Update(float dt)
 		{
 			pSwitch = false;
 			timer = 0;
-			if (state != BrickState::COLLECTED) state = BrickState::BRICK;
-			body->SetCollidable(true);
+			if (state != BrickState::COLLECTED)
+			{
+				state = BrickState::BRICK;
+				body->SetCollidable(true);
+			}
 			app->tex->UnLoad(texture);
 			switch (editor->GetBackground())
 			{
@@ -94,6 +100,7 @@ void BrickTile::Draw(float dt)
 	bool left = false;
 	bool right = false;
 	ListItem<Tile*>* list;
+	BrickTile* bT = nullptr;
 
 	switch (state)
 	{
@@ -111,7 +118,8 @@ void BrickTile::Draw(float dt)
 
 		for (list = editor->tiles.start; list != nullptr; list = list->next)
 		{
-			if (list->data->type == TileType::BRICK)
+			bT = (BrickTile*)list->data;
+			if (list->data->type == TileType::BRICK && bT->state != BrickState::COLLECTED)
 			{
 				if (list->data->coordinates == leftTile) left = true;
 				if (list->data->coordinates == rightTile) right = true;
@@ -135,7 +143,7 @@ void BrickTile::Restart()
 {
 	pSwitch = false;
 	timer = 0;
-	if (state == BrickState::COIN)
+	if (state == BrickState::COIN || state == BrickState::COLLECTED)
 	{
 		body->SetCollidable(true);
 		app->tex->UnLoad(texture);

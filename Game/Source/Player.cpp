@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "Scene.h"
+#include "Textures.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -10,6 +11,16 @@ Player::Player() : Entity(EntityType::PLAYER)
 bool Player::Start()
 {
 	UpdatePosition({300, 1000});
+	texture = app->tex->Load("Assets/Textures/Entities/Player/spritesheet_player.png");
+
+	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 53 * i, 0, 53, 53 }); // IDLE
+	idleAnim.loop = true;
+	idleAnim.speed = 5;
+	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 53 * i, 0, 53, 53 }); // WALK
+	walkAnim.loop = true;
+	walkAnim.speed = 5;
+
+	currAnim = &idleAnim;
 
 	return true;
 }
@@ -21,9 +32,12 @@ bool Player::Update(float dt)
     return true;
 }
 
-bool Player::Draw()
+bool Player::Draw(float dt)
 {
-    return false;
+	currAnim->Update(dt);
+	app->render->DrawTexture(texture, body->position.x, body->position.y, 1, 1, &currAnim->GetCurrentFrame(), false);
+
+    return true;
 }
 
 void Player::SetTexture(SDL_Texture *tex)

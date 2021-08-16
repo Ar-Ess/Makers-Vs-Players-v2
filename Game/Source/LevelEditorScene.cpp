@@ -76,6 +76,7 @@ void LevelEditor::Draw(float dt)
 	ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next) list->data->Draw(dt);
 
+	player->Draw(dt);
 	DebugDraw();
 	phys->Draw(player->body);
 }

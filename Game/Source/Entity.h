@@ -6,6 +6,7 @@ class Player;
 class Boss;
 class Item;
 class NPC;
+struct SDL_Texture;
 
 enum class EntityType
 {
@@ -31,6 +32,7 @@ public:
 
 public:
     EntityType type;
+    SDL_Texture* texture = nullptr;
 };
 
 #endif // __ENTITY_H__

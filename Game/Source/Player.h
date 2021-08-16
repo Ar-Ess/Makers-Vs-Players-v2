@@ -24,7 +24,7 @@ public:
 
     bool Update(float dt);
 
-    bool Draw();
+    bool Draw(float dt);
 
     void SetTexture(SDL_Texture *tex);
 
@@ -40,16 +40,15 @@ public:
     }
 
 private: //Characteristics
-
     friend class LevelEditor;
-
     void UpdatePosition(iPoint pos);
 
+    Animation idleAnim;
+    Animation walkAnim;
+    Animation* currAnim = nullptr;
+
 public:
-
-    SDL_Texture* texture = nullptr;
     DynamicBody* body = nullptr;
-
     bool godMode = false;
     bool dragged = false;
 };
