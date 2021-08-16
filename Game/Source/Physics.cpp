@@ -988,6 +988,7 @@ void Body::DeClipper(Body &body, Direction dir)
 					// Top
 					currentBody->position.y = body.rect.y + body.rect.h;
 					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+
 					currentBody->onRoof = true;
 				}
 				else if (dir == Direction::LEFT && (currentBody->position.x < body.position.x + body.rect.w) && (currentBody->position.x > body.position.x) && (currentBody->position.x + currentBody->rect.w > body.position.x + body.rect.w))
@@ -996,6 +997,7 @@ void Body::DeClipper(Body &body, Direction dir)
 					currentBody->position.x = body.rect.x + body.rect.w;
 					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
 					currentBody->onLeftWall = true;
+
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 				}
 				else if (dir == Direction::RIGHT && (currentBody->position.x + currentBody->rect.w > body.position.x) && (currentBody->position.x + currentBody->rect.w < body.position.x + body.rect.w) && (currentBody->position.x < body.position.x))
@@ -1004,6 +1006,7 @@ void Body::DeClipper(Body &body, Direction dir)
 					currentBody->position.x = body.rect.x - currentBody->rect.w;
 					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
 					currentBody->onRightWall = true;
+
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 				}
 
