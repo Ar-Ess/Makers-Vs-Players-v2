@@ -598,10 +598,7 @@ void Physics::CheckCollisions(Body* b, fPoint prevPos)
 			}
 			else if (bodyList1->data->colliderType == CIRCLE && b->colliderType == RECTANGLE)
 			{
-				if (collisionUtil.CheckCollision(bodyList1->data->circle, b->rect))
-				{
-					collided = true;
-				}
+				if (collisionUtil.CheckCollision(bodyList1->data->circle, b->rect)) collided = true;
 			}
 			else if (bodyList1->data->colliderType == RECTANGLE && b->colliderType == CIRCLE)
 			{

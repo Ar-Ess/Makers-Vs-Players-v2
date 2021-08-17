@@ -16,7 +16,7 @@ bool Player::Start()
 	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 43 * i, 0, 43, 53 }); // IDLE
 	idleAnim.loop = true;
 	idleAnim.speed = 6;
-	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 53, 43, 53 }); // WALK
+	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 53, 43, 51 }); // WALK
 	walkAnim.loop = true;
 	walkAnim.speed = 11;
 
@@ -35,7 +35,7 @@ bool Player::Update(float dt)
 bool Player::Draw(float dt)
 {
 	currAnim->Update(dt);
-	app->render->DrawTexture(texture, body->position.x, body->position.y, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
+	app->render->DrawTexture(texture, body->position.x, body->position.y - 6, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
 
     return true;
 }
