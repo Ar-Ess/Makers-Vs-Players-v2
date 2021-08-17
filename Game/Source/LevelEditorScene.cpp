@@ -256,8 +256,25 @@ void LevelEditor::ScreenAddition()
 
 	if (app->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && currScreen > 0)
 	{
+		ScreenRemoving(currScreen);
+
 		currScreen--;
-		app->render->camera.x = -wTileScreen[currScreen] * TILE_SIZE;
+		int newCamPos = wTileScreen[currScreen] * TILE_SIZE;
+		int deltaCamPLayer = (int)player->body->GetPosition().x + app->render->camera.x;
+
+		app->render->camera.x = -newCamPos;
+		player->UpdatePosition({ (-app->render->camera.x) + deltaCamPLayer, (int)player->body->GetPosition().y });
+	}
+}
+
+void LevelEditor::ScreenRemoving(int screen)
+{
+	for (int x = wTileScreen[screen]; x < wTileScreen[screen + 1]; x++)
+	{
+		for (int y = 0; y < TILE_PER_SCREEN_H; y++)
+		{
+			if (TileExistance(iPoint{ x, y })) DeleteTile(iPoint{ x, y });
+		}
 	}
 }
 

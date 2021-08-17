@@ -86,6 +86,7 @@ private:
 	void TileSelectionLogic();
 	void CameraDisplace();
 	void ScreenAddition();
+	void ScreenRemoving(int screen);
 	void SelectionPlacement();
 	void TileRemoveLogic();
 	iPoint GetCoordsFromMousePos();
