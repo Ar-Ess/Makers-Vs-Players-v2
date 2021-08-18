@@ -92,8 +92,37 @@ enum class DebugBools
 
 struct GhostSlot
 {
-	Direction dir;
+	GhostSlot() 
+	{
+		int surface = 0;
+		Direction dir;
+		int slot = -1;
+	}
+	GhostSlot(Direction direct, int surf, int slt)
+	{
+		dir = direct;
+		surface = surf;
+		slot = slt;
+	}
+	~GhostSlot()
+	{
+
+	}
+
 	int surface = 0;
+	Direction dir;
+	int slot = -1;
+
+	bool operator >(const GhostSlot& a)
+	{
+		if (surface > a.surface) return true;
+		return false;
+	}
+	bool operator <(const GhostSlot& a)
+	{
+		if (surface < a.surface) return true;
+		return false;
+	}
 };
 
 class Body
@@ -338,7 +367,6 @@ private:
 	void Step(float dt);
 	void Integrate(DynamicBody* item, float dt);
 	void CheckCollisions(Body* body, fPoint prevPos);
-	List<GhostSlot> CollisionSignificance(Body* b, List<Body*> ghost);
 	Direction DirectionDetection(fPoint currPos, fPoint prevPos);
 	Direction InvertDirection(Direction dir);
 	void ChangeGravityAcceleration(fPoint acceleration);

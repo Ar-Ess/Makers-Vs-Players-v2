@@ -436,7 +436,7 @@ void Physics::SetPhysicsPreset(PhysicsPreset phPreset)
 	{
 	case PhysicsPreset::PLATFORMER_PHYSICS_PRESET:
 		SetGlobalGravity(fPoint{ 0.0f, 10.0f });
-		SetGlobalRestitution(fPoint{ 0.02f, 0.1f });
+		SetGlobalRestitution(fPoint{ 0.02f, 0.0f });
 		SetGlobalFriction(fPoint{0.1f, 0.0f});
 		break;
 
@@ -585,10 +585,11 @@ void Physics::DestroyBody(Body* b)
 
 void Physics::CheckCollisions(Body* b, fPoint prevPos)
 {
-	ListItem<Body*>* bodyList1;
+	//ListItem<Body*>* bodyList1;
 	List<Body*> ghostColliders;
+	DynArray<GhostSlot> slotList;
 
-	for (bodyList1 = bodyList.start; bodyList1 != NULL; bodyList1 = bodyList1->next)
+	for (ListItem<Body*>* bodyList1 = bodyList.start; bodyList1 != NULL; bodyList1 = bodyList1->next)
 	{
 		if (bodyList1->data != b)
 		{
@@ -620,7 +621,32 @@ void Physics::CheckCollisions(Body* b, fPoint prevPos)
 		}
 	}
 
-	if (ghostColliders.Count() != 0) CollisionSignificance(b, ghostColliders);
+	if (ghostColliders.Count() != 0)
+	{
+		short int i = 0;
+		for (ListItem<Body*>* item = ghostColliders.start; item != NULL; item = item->next)
+		{
+			SDL_Rect inter = utils.IntersectRectangle(b->rect, item->data->rect);
+			Direction dir = DirectionDetection(b->GetPosition(), prevPos);
+			slotList.PushBack({ dir, (inter.w * inter.h), i });
+			i++;
+		}
+
+		if (slotList.Count() > 2)
+		{
+			slotList.CombSort();
+			slotList.Flip();
+		}
+		if (slotList.Count() == 2)
+		{
+			if (slotList[0] < slotList[1]) slotList.Flip();
+		}
+
+		Direction invDir = InvertDirection(slotList[0].dir);
+
+		//bodyList1->data->SolveCollision(*b, invDir);
+		b->SolveCollision(*ghostColliders.At(slotList[0].slot)->data, slotList[0].dir);
+	}
 }
 
 Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
@@ -643,24 +669,6 @@ Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
 	}
 
 	return Direction();
-}
-
-List<GhostSlot> Physics::CollisionSignificance(Body* b, List<Body*> ghost)
-{
-	iPoint bPos = { (int)b->GetPosition().x,  (int)b->GetPosition().y };
-	iPoint bMag = { (int)b->GetMagnitudes().x,  (int)b->GetMagnitudes().y };
-
-	for (ListItem<Body*>* item = ghost.start; item != NULL; item = item->next)
-	{
-		iPoint ghostPos = { (int)item->data->GetPosition().x,  (int)item->data->GetPosition().y };
-		iPoint ghostMag = { (int)item->data->GetMagnitudes().x,  (int)item->data->GetMagnitudes().y };
-		int w = 0, h = 0;
-
-		SDL_Rect a = utils.IntersectingRectangle({ 0, 5, 8, 5 }, {4, 12, 6, 8});
-		a = a;
-	}
-
-	return List<GhostSlot>();
 }
 
 Direction Physics::InvertDirection(Direction dir)

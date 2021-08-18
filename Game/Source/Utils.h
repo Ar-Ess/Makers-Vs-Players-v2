@@ -142,12 +142,12 @@ public:
 		return false;
 	}
 
-	SDL_Rect IntersectingRectangle(SDL_Rect r1, SDL_Rect r2)
+	SDL_Rect IntersectRectangle(SDL_Rect r1, SDL_Rect r2)
 	{
 		int x = Max(r1.x, r2.x);
-		int y = Min(r1.y, r2.y);
-		int w = Min(r1.x + r1.w, r2.x + r2.w) - Max(r1.x, r2.x);
-		int h = Min(r1.y + r1.h, r2.y + r2.h) - Max(r1.y, r2.y);
+		int y = Max(r1.y, r2.y);
+		int w = Min(r1.x + r1.w, r2.x + r2.w) - x;
+		int h = Min(r1.y + r1.h, r2.y + r2.h) - y;
 
 		return {x, y, w, h};
 	}

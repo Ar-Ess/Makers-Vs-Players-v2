@@ -272,6 +272,32 @@ public:
 		return ret;
 	}
 
+	int BubbleSortHighLow()
+	{
+		int ret = 0;
+		bool swapped = true;
+
+		while (swapped)
+		{
+			swapped = false;
+			ListItem<tdata>* tmp = start;
+
+			while (tmp != NULL && tmp->next != NULL)
+			{
+				++ret;
+				if (tmp->data < tmp->next->data)
+				{
+					SWAP(tmp->data, tmp->next->data);
+					swapped = true;
+				}
+
+				tmp = tmp->next;
+			}
+		}
+
+		return ret;
+	}
+
 	int Find(const tdata& data)
 	{
 		ListItem<tdata>* tmp = start;

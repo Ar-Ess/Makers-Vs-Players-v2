@@ -35,7 +35,7 @@ bool Player::Update(float dt)
 bool Player::Draw(float dt)
 {
 	currAnim->Update(dt);
-	app->render->DrawTexture(texture, body->position.x, body->position.y - 6, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
+	app->render->DrawTexture(texture, body->position.x - 6, body->position.y - 6, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
 
     return true;
 }
@@ -53,7 +53,7 @@ void Player::PlayerControls()
 {
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		body->Jump(-400.0f, false);
+		body->Jump(-450.0f, false);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
