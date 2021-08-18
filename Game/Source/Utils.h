@@ -142,6 +142,38 @@ public:
 		return false;
 	}
 
+	SDL_Rect IntersectingRectangle(SDL_Rect r1, SDL_Rect r2)
+	{
+		int x = Max(r1.x, r2.x);
+		int y = Min(r1.y, r2.y);
+		int w = Min(r1.x + r1.w, r2.x + r2.w) - Max(r1.x, r2.x);
+		int h = Min(r1.y + r1.h, r2.y + r2.h) - Max(r1.y, r2.y);
+
+		return {x, y, w, h};
+	}
+
+	int Min(int a, int b)
+	{
+		if (a <= b) return a;
+		return b;
+	}
+	float Min(float a, float b)
+	{
+		if (a <= b) return a;
+		return b;
+	}
+
+	int Max(int a, int b)
+	{
+		if (a >= b) return a;
+		return b;
+	}
+	float Max(float a, float b)
+	{
+		if (a >= b) return a;
+		return b;
+	}
+
 };
 
 #endif

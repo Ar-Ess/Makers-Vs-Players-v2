@@ -90,6 +90,12 @@ enum class DebugBools
 	DASH
 };
 
+struct GhostSlot
+{
+	Direction dir;
+	int surface = 0;
+};
+
 class Body
 {
 public:
@@ -332,6 +338,7 @@ private:
 	void Step(float dt);
 	void Integrate(DynamicBody* item, float dt);
 	void CheckCollisions(Body* body, fPoint prevPos);
+	List<GhostSlot> CollisionSignificance(Body* b, List<Body*> ghost);
 	Direction DirectionDetection(fPoint currPos, fPoint prevPos);
 	Direction InvertDirection(Direction dir);
 	void ChangeGravityAcceleration(fPoint acceleration);
@@ -343,7 +350,7 @@ private:
 
 private:
 	List<Body*> bodyList;
-	Utils collisionUtil;
+	Utils utils;
 	fPoint globalGravity = {};
 	fPoint globalRestitution = {};
 	fPoint globalFriction = {};

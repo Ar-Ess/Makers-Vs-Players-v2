@@ -517,7 +517,7 @@ void Physics::DeathLimit(SDL_Rect limits)
 		switch (list->data->colliderType)
 		{
 		case CollisionType::RECTANGLE:
-			if (!collisionUtil.CheckCollision(list->data->rect, limits))
+			if (!utils.CheckCollision(list->data->rect, limits))
 			{
 				app->tex->UnLoad(list->data->texture);
 				list->data->texture = nullptr;
@@ -527,7 +527,7 @@ void Physics::DeathLimit(SDL_Rect limits)
 			break;
 
 		case CollisionType::CIRCLE:
-			if (!collisionUtil.CheckCollision(list->data->circle, limits))
+			if (!utils.CheckCollision(list->data->circle, limits))
 			{
 				app->tex->UnLoad(list->data->texture);
 				list->data->texture = nullptr;
@@ -586,17 +586,17 @@ void Physics::DestroyBody(Body* b)
 void Physics::CheckCollisions(Body* b, fPoint prevPos)
 {
 	ListItem<Body*>* bodyList1;
+	List<Body*> ghostColliders;
+
 	for (bodyList1 = bodyList.start; bodyList1 != NULL; bodyList1 = bodyList1->next)
 	{
 		if (bodyList1->data != b)
 		{
-			bool collided = false;
-
 			if (bodyList1->data->colliderType == RECTANGLE && b->colliderType == RECTANGLE)
 			{
-				if (collisionUtil.CheckCollision(bodyList1->data->rect, b->rect)) collided = true;
+				if (utils.CheckCollision(bodyList1->data->rect, b->rect)) ghostColliders.Add(bodyList1->data);
 			}
-			else if (bodyList1->data->colliderType == CIRCLE && b->colliderType == RECTANGLE)
+			/*else if (bodyList1->data->colliderType == CIRCLE && b->colliderType == RECTANGLE)
 			{
 				if (collisionUtil.CheckCollision(bodyList1->data->circle, b->rect)) collided = true;
 			}
@@ -616,9 +616,11 @@ void Physics::CheckCollisions(Body* b, fPoint prevPos)
 
 				bodyList1->data->SolveCollision(*b, invDir);
 				b->SolveCollision(*bodyList1->data, dir);
-			}
+			}*/
 		}
 	}
+
+	if (ghostColliders.Count() != 0) CollisionSignificance(b, ghostColliders);
 }
 
 Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
@@ -641,6 +643,24 @@ Direction Physics::DirectionDetection(fPoint currPos, fPoint prevPos)
 	}
 
 	return Direction();
+}
+
+List<GhostSlot> Physics::CollisionSignificance(Body* b, List<Body*> ghost)
+{
+	iPoint bPos = { (int)b->GetPosition().x,  (int)b->GetPosition().y };
+	iPoint bMag = { (int)b->GetMagnitudes().x,  (int)b->GetMagnitudes().y };
+
+	for (ListItem<Body*>* item = ghost.start; item != NULL; item = item->next)
+	{
+		iPoint ghostPos = { (int)item->data->GetPosition().x,  (int)item->data->GetPosition().y };
+		iPoint ghostMag = { (int)item->data->GetMagnitudes().x,  (int)item->data->GetMagnitudes().y };
+		int w = 0, h = 0;
+
+		SDL_Rect a = utils.IntersectingRectangle({ 0, 5, 8, 5 }, {4, 12, 6, 8});
+		a = a;
+	}
+
+	return List<GhostSlot>();
 }
 
 Direction Physics::InvertDirection(Direction dir)
