@@ -9,6 +9,7 @@
 #include "GroundTile.h"
 #include "Coin.h"
 #include "BrickTile.h"
+#include "SpikeTrapTile.h"
 
 #include "Log.h"
 
@@ -24,7 +25,9 @@ void LevelEditor::Start()
 {
 	phys = new Physics();
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	player->body = (DynamicBody*)phys->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, 32, 47 }, { 0, 0 }, { 0, 0 }, 1.5f);
+	player->body = (DynamicBody*)phys->CreateBody(BodyType::DYNAMIC_BODY, fPoint{ 300.0f, 700.0f }, { 300, 1000, PLAYER_W, PLAYER_H }, { 0, 0 }, { 0, 0 }, 1.5f);
+	if (!phys->SetBodyAsPlayer(player->body)) LOG("PLAYER BODY IS NOT SETTED AS PLAYER");
+
 	phys->SetPhysicsPreset(PhysicsPreset::PLATFORMER_PHYSICS_PRESET);
 	phys->PausePhysics(true);
 	
@@ -204,6 +207,7 @@ void LevelEditor::TileSelectionLogic()
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) select = Selection::GROUND;
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) select = Selection::COIN;
 	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) select = Selection::BRICK;
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) select = Selection::SPIKE_TRAP;
 }
 
 void LevelEditor::CameraDisplace()
@@ -286,6 +290,7 @@ void LevelEditor::SelectionPlacement()
 		GroundTile* gT = nullptr;
 		Coin* c = nullptr;
 		BrickTile* bT = nullptr;
+		SpikeTrapTile* sTT = nullptr;
 
 		if (TileExistance(coord)) return;
 
@@ -304,6 +309,11 @@ void LevelEditor::SelectionPlacement()
 		case Selection::BRICK:
 			bT = new BrickTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this);
 			tiles.Add(bT);
+			break;
+
+		case Selection::SPIKE_TRAP:
+			sTT = new SpikeTrapTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this);
+			tiles.Add(sTT);
 			break;
 		}
 	}
@@ -486,15 +496,21 @@ void LevelEditor::UpdatePreview(float dt)
 	for (list = tiles.start; list != nullptr; list = list->next) list->data->Update(dt);
 
 	//ALWAYS END
-	ReplaceEditPlayer();
+	OutBoundsDeath();
 }
 
-void LevelEditor::ReplaceEditPlayer()
+void LevelEditor::OutBoundsDeath()
 {
 	iPoint pos = { (int)player->body->GetPosition().x, (int)player->body->GetPosition().y };
 	if (pos.y > -app->render->camera.y + 720 + 100)
 	{
-		ChangeEditorState(EditorState::EDITING);
-		player->UpdatePosition({ pos.x, -app->render->camera.y + 360 });
+		PreviewDeath();
 	}
+}
+
+void LevelEditor::PreviewDeath()
+{
+	iPoint pos = { (int)player->body->GetPosition().x, (int)player->body->GetPosition().y };
+	ChangeEditorState(EditorState::EDITING);
+	player->UpdatePosition({ pos.x, -app->render->camera.y + 360 });
 }

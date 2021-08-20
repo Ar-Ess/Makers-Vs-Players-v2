@@ -123,6 +123,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SpikeTrapTile.cpp" />
     <ClCompile Include="Source\Spline.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SpikeTrapTile.h" />
     <ClInclude Include="Source\Spline.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Tile.h" />

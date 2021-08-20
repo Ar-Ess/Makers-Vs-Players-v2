@@ -16,7 +16,8 @@ enum class TileType
 	NO_TILE = 0,
 	GROUND,
 	COIN,
-	BRICK
+	BRICK,
+	SPIKE_TRAP
 };
 
 class Tile

@@ -37,7 +37,8 @@ enum class Selection
 	ERASE,
 	GROUND,
 	COIN,
-	BRICK
+	BRICK,
+	SPIKE_TRAP
 };
 
 enum class Background
@@ -80,6 +81,7 @@ public:
 	}
 
 private:
+	friend class SpikeTrapTile;
 
 	//EDITOR FUNCTIONS
 	void UpdateEditor(float dt);
@@ -99,7 +101,8 @@ private:
 
 	//PREVIEW FUNCTIONS
 	void UpdatePreview(float dt);
-	void ReplaceEditPlayer();
+	void OutBoundsDeath();
+	void PreviewDeath();
 
 public:
 	Physics* phys = nullptr;

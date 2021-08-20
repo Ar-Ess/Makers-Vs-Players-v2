@@ -12,6 +12,9 @@
 
 #include "SDL/include/SDL.h"
 
+#define PLAYER_W 32
+#define PLAYER_H 45
+
 class Animation;
 
 class Player : public Entity

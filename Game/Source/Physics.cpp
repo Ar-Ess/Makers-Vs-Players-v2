@@ -7,6 +7,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Physics.h"
+#include "Player.h"
 
 #include "GuiString.h"
 #include "GuiManager.h"
@@ -344,7 +345,7 @@ void Physics::Step(float dt)
 			}
 
 			// Check Colls
-			CheckCollisions(dB, prevPosition);
+			collidingPlayer = CheckCollisions(dB, prevPosition);
 
 			// onAir check
 			if (!dB->onGround && !dB->onLeftWall && !dB->onRightWall && !dB->onRoof && !dB->onJump && !dB->onDoubleJump && !dB->onDash && !dB->onWallJump && !dB->onWater) dB->onAir = true;
@@ -558,6 +559,7 @@ void Physics::DestroyScenario()
 void Physics::PausePhysics(bool pause)
 {
 	globalPause = pause;
+	collidingPlayer = nullptr;
 }
 
 void Physics::ResetAllForces()
@@ -583,7 +585,19 @@ void Physics::DestroyBody(Body* b)
 	bodyList.Del(bodyList.At(bodyList.Find(b)));
 }
 
-void Physics::CheckCollisions(Body* b, fPoint prevPos)
+bool Physics::SetBodyAsPlayer(Body* b)
+{
+	ListItem<Body*>* list;
+	for (list = bodyList.start; list != NULL; list = list->next)
+	{
+		if (list->data->player) return false;
+	}
+
+	b->player = true;
+	return true;
+}
+
+Body* Physics::CheckCollisions(Body* b, fPoint prevPos)
 {
 	//ListItem<Body*>* bodyList1;
 	List<Body*> ghostColliders;
@@ -628,6 +642,8 @@ void Physics::CheckCollisions(Body* b, fPoint prevPos)
 		{
 			SDL_Rect inter = utils.IntersectRectangle(b->rect, item->data->rect);
 			Direction dir = DirectionDetection(b->GetPosition(), prevPos);
+			if (inter.h < 1) inter.h = 1;
+			if (inter.w < 1) inter.w = 1;
 			slotList.PushBack({ dir, (inter.w * inter.h), i });
 			i++;
 		}
@@ -646,6 +662,10 @@ void Physics::CheckCollisions(Body* b, fPoint prevPos)
 
 		//bodyList1->data->SolveCollision(*b, invDir);
 		b->SolveCollision(*ghostColliders.At(slotList[0].slot)->data, slotList[0].dir);
+
+		if (b->player) return ghostColliders.At(slotList[0].slot)->data;
+		
+		return nullptr;
 	}
 }
 

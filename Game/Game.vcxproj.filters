@@ -114,6 +114,9 @@
     <ClCompile Include="Source\BrickTile.cpp">
       <Filter>Entities\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SpikeTrapTile.cpp">
+      <Filter>Entities\Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -280,6 +283,9 @@
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\BrickTile.h">
+      <Filter>Entities\Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpikeTrapTile.h">
       <Filter>Entities\Tiles</Filter>
     </ClInclude>
   </ItemGroup>

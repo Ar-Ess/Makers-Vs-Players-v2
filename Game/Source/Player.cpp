@@ -13,10 +13,10 @@ bool Player::Start()
 	UpdatePosition({300, 1000});
 	texture = app->tex->Load("Assets/Textures/Entities/Player/spritesheet_player.png");
 
-	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 43 * i, 0, 43, 53 }); // IDLE
+	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 43 * i, 0, 43, 51 }); // IDLE
 	idleAnim.loop = true;
 	idleAnim.speed = 6;
-	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 53, 43, 51 }); // WALK
+	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 51, 43, 51 }); // WALK
 	walkAnim.loop = true;
 	walkAnim.speed = 11;
 

@@ -217,6 +217,7 @@ protected:
 	float rotation;
 	float mass;
 	bool isCollidable = true;
+	bool player = false;
 };
 
 class StaticBody : public Body
@@ -357,6 +358,13 @@ public:
 	void ResetAllForces();
 	//Destroys de body setted as an input of this function
 	void DestroyBody(Body* b);
+	//Returns the body which collisions are calculated with player
+	Body* ReturnPlayerCollision() 
+	{
+		return collidingPlayer;
+	}
+	//Sets body as the main player, for specific functions of it. Returns false if there is already one body setted as player.
+	bool SetBodyAsPlayer(Body* b);
 
 public:
 	bool debug = false;
@@ -366,7 +374,7 @@ private:
 	// Debug
 	void Step(float dt);
 	void Integrate(DynamicBody* item, float dt);
-	void CheckCollisions(Body* body, fPoint prevPos);
+	Body* CheckCollisions(Body* body, fPoint prevPos);
 	Direction DirectionDetection(fPoint currPos, fPoint prevPos);
 	Direction InvertDirection(Direction dir);
 	void ChangeGravityAcceleration(fPoint acceleration);
@@ -386,6 +394,7 @@ private:
 	bool globalRestitutionActive = false;
 	bool globalFrictionActive = false;
 	bool globalPause = false;
+	Body* collidingPlayer = nullptr;
 };
 
 #endif
