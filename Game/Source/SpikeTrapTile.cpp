@@ -16,11 +16,11 @@ SpikeTrapTile::SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE)
 	switch (lE->GetBackground())
 	{
 	case Background::SKY:
-		//texture = app->tex->Load("Assets/Textures/Tilesets/ground_sky_tileset.png");
+		texture = app->tex->Load("Assets/Textures/Tilesets/spike_trap_sky_tileset.png");
 		break;
 
 	case Background::NOON:
-		//texture = app->tex->Load("Assets/Textures/Tilesets/ground_noon_tileset.png");
+		texture = app->tex->Load("Assets/Textures/Tilesets/spike_trap_sky_tileset.png");
 		break;
 	}
 
@@ -48,6 +48,7 @@ void SpikeTrapTile::Update(float dt)
 
 void SpikeTrapTile::Draw(float dt)
 {
+	app->render->DrawTexture(texture, position.x, position.y, 1, 1, false);
 }
 
 void SpikeTrapTile::Restart()

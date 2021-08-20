@@ -463,6 +463,10 @@ void LevelEditor::ChangeTilesetLogic()
 				case TileType::BRICK:
 					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/brick_sky_tileset.png");
 					break;
+
+				case TileType::SPIKE_TRAP:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/spike_trap_sky_tileset.png");
+					break;
 				}
 				break;
 
@@ -479,6 +483,10 @@ void LevelEditor::ChangeTilesetLogic()
 
 				case TileType::BRICK:
 					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/brick_noon_tileset.png");
+					break;
+
+				case TileType::SPIKE_TRAP:
+					item->data->texture = app->tex->Load("Assets/Textures/Tilesets/spike_trap_sky_tileset.png");
 					break;
 				}
 				break;
@@ -514,3 +522,6 @@ void LevelEditor::PreviewDeath()
 	ChangeEditorState(EditorState::EDITING);
 	player->UpdatePosition({ pos.x, -app->render->camera.y + 360 });
 }
+
+// BUGS
+// 1. When placing a coin on top of a solid block, the block collision is weird, player clips through that block
