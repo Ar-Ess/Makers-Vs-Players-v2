@@ -13,10 +13,10 @@ bool Player::Start()
 	UpdatePosition({300, 1000});
 	texture = app->tex->Load("Assets/Textures/Entities/Player/spritesheet_player.png");
 
-	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 43 * i, 0, 43, 51 }); // IDLE
+	for (int i = 0; i < 5; i++) idleAnim.PushBack({ 43 * i, 0, 43, 58 }); // IDLE
 	idleAnim.loop = true;
 	idleAnim.speed = 6;
-	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 51, 43, 51 }); // WALK
+	for (int i = 0; i < 7; i++) walkAnim.PushBack({ 43 * i, 58, 43, 58 }); // WALK
 	walkAnim.loop = true;
 	walkAnim.speed = 11;
 
@@ -35,7 +35,7 @@ bool Player::Update(float dt)
 bool Player::Draw(float dt)
 {
 	currAnim->Update(dt);
-	app->render->DrawTexture(texture, body->position.x - 6, body->position.y - 6, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
+	app->render->DrawTexture(texture, body->position.x - 6, body->position.y - 13, 1, 1, &currAnim->GetCurrentFrame(), false, true, 0.0, (SDL_RendererFlip)((int)currAnim->mirror));
 
     return true;
 }
