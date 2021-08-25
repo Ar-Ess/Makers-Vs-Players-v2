@@ -310,7 +310,7 @@ void Physics::Step(float dt)
 		case BodyType::DYNAMIC_BODY:
 			DynamicBody* dB = (DynamicBody*)list->data;
 			// Correct angles rotation
-			dB->rotation = dB->ToPositiveAngle(dB->rotation);
+			// dB->rotation = dB->ToPositiveAngle(dB->rotation);
 
 			//dynamicBody->ApplyHidroDrag();
 			//dynamicBody->ApplyBuoyancy();
@@ -320,6 +320,9 @@ void Physics::Step(float dt)
 			// Second law newton
 			dB->SecondNewton();
 
+			// First law Buxeda
+			dB->FirstBuxeda();
+
 			// Applying gravity acceleration post second law newton
 			dB->acceleration += dB->gravityAcceleration;
 
@@ -327,6 +330,8 @@ void Physics::Step(float dt)
 
 			// Integrate
 			Integrate(dB, dt);
+
+			// 
 
 			dB->acceleration = { 0.0f,0.0f };
 
@@ -860,14 +865,14 @@ void DynamicBody::Jump(float newtonsY, bool doubleJump)
 
 	if (doubleJump && !onDoubleJump && !onWallJump && onJump && !onLeftWall && !onRightWall)
 	{
-		this->ApplyForce({ 0.0f, newtonsY / 2 });
+		this->ApplyMomentum({ 0.0f, newtonsY / 2 });
 		onDoubleJump = true;
 		onJump = false;
 	}
 
 	if (onGround && !onJump)
 	{
-		this->ApplyForce({0.0f, newtonsY });
+		this->ApplyMomentum({0.0f, newtonsY });
 		onJump = true;
 	}
 }
@@ -906,6 +911,17 @@ void DynamicBody::ApplyForce(float newtonsX, float newtonsY)
 	forces.PushBack(newtons);
 }
 
+void DynamicBody::ApplyMomentum(fPoint momentum)
+{
+	momentums.PushBack(momentum);
+}
+
+void DynamicBody::ApplyMomentum(float momentumX, float momentumY)
+{
+	fPoint momentum = {momentumX, momentumY};
+	momentums.PushBack(momentum);
+}
+
 void DynamicBody::ResetForces()
 {
 	this->acceleration.SetToZero();
@@ -927,6 +943,21 @@ void DynamicBody::SecondNewton()
 	acceleration.y += sumForces.y / mass;
 
 	sumForces = { 0.0f,0.0f };
+}
+
+void DynamicBody::FirstBuxeda()
+{
+	for (int i = 0; i < momentums.Count(); i++)
+	{
+		sumMomentum += *momentums.At(i);
+		momentums.Pop(*momentums.At(i));
+	}
+	momentums.Clear();
+
+	velocity.x += sumMomentum.x / mass;
+	velocity.y += sumMomentum.y / mass;
+
+	sumMomentum = { 0.0f,0.0f };
 }
 
 void DynamicBody::ApplyFriction(float dt)
@@ -1036,7 +1067,7 @@ void Body::DeClipper(Body &body, Direction dir)
 
 					currentBody->onRoof = true;
 				}
-				else if (dir == Direction::LEFT && (currentBody->position.x < body.position.x + body.rect.w) && (currentBody->position.x > body.position.x) && (currentBody->position.x + currentBody->rect.w > body.position.x + body.rect.w))
+				else if ((currentBody->position.x < body.position.x + body.rect.w) && (currentBody->position.x > body.position.x) && (currentBody->position.x + currentBody->rect.w > body.position.x + body.rect.w))
 				{
 					// Left wall
 					currentBody->position.x = body.rect.x + body.rect.w;
@@ -1045,7 +1076,7 @@ void Body::DeClipper(Body &body, Direction dir)
 
 					if (currentBody->onWallJump) currentBody->onWallJump = false;
 				}
-				else if (dir == Direction::RIGHT && (currentBody->position.x + currentBody->rect.w > body.position.x) && (currentBody->position.x + currentBody->rect.w < body.position.x + body.rect.w) && (currentBody->position.x < body.position.x))
+				else if ((currentBody->position.x + currentBody->rect.w > body.position.x) && (currentBody->position.x + currentBody->rect.w < body.position.x + body.rect.w) && (currentBody->position.x < body.position.x))
 				{
 					// Right wall
 					currentBody->position.x = body.rect.x - currentBody->rect.w;
@@ -1058,157 +1089,6 @@ void Body::DeClipper(Body &body, Direction dir)
 				//POSITION SET
 				currentBody->rect.x = (int)currentBody->position.x;
 				currentBody->rect.y = (int)currentBody->position.y;
-			}
-			else if (currentBody->colliderType == RECTANGLE && body.colliderType == CIRCLE)
-			{
-				//TOP & DOWN
-				if ((currentBody->position.y + currentBody->rect.h >= body.circle.y - body.circle.radius) && !(currentBody->position.y >= body.circle.y - body.circle.radius) && (currentBody->position.y + currentBody->rect.h <= body.circle.y + body.circle.radius))
-				{
-					// Ground
-					currentBody->position.y = body.circle.y - body.circle.radius - currentBody->rect.h;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-
-					currentBody->onGround = true;
-					currentBody->dashCount = 0;
-					if (currentBody->onJump)
-					{
-						currentBody->onJump = false;
-						if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					}
-					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-					if (currentBody->onDash) currentBody->onDash = false;
-				}
-				else if ((currentBody->position.y <= body.circle.y + body.circle.radius) && (currentBody->position.y >= body.circle.y - body.circle.radius) && !(currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.radius))
-				{
-					// Top
-					currentBody->position.y = body.circle.y + body.circle.radius;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-					currentBody->onRoof = true;
-				}
-
-				//LEFT & RIGHT
-				if ((currentBody->position.x <= body.circle.x + body.circle.radius) && (currentBody->position.x >= body.circle.x - body.circle.radius) && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.circle.radius))
-				{
-					// Left wall
-					currentBody->position.x = body.circle.x + body.circle.radius;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-
-					currentBody->onLeftWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-				else if ((currentBody->position.x + currentBody->rect.w >= body.circle.x - body.circle.radius) && !(currentBody->position.x >= body.circle.x - body.circle.radius) && (currentBody->position.x + currentBody->rect.w <= body.circle.x + body.circle.radius))
-				{
-					// Right wall
-					currentBody->position.x = body.circle.x - body.circle.radius - currentBody->rect.w;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-					currentBody->onRightWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-
-				//POSITION SET
-				currentBody->circle.x = (int)currentBody->position.x;
-				currentBody->circle.y = (int)currentBody->position.y;
-			}
-			else if (currentBody->colliderType == CIRCLE && body.colliderType == RECTANGLE)
-			{
-				//TOP & DOWN
-				if (currentBody->position.y + currentBody->rect.h >= body.position.y && !(currentBody->position.y >= body.position.y) && (currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.GetDiameter()))
-				{
-					// Ground
-					currentBody->position.y = body.circle.y - currentBody->rect.h;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-
-					currentBody->dashCount = 0;
-					currentBody->onGround = true;
-					if (currentBody->onJump)
-					{
-						currentBody->onJump = false;
-						if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					}
-					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-					if (currentBody->onDash) currentBody->onDash = false;
-				}
-				else if ((currentBody->position.y <= body.position.y + body.circle.GetDiameter()) && currentBody->position.y >= body.position.y && !(currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.GetDiameter()))
-				{
-					// Top
-					currentBody->position.y = body.circle.y + body.circle.radius;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-					currentBody->onRoof = true;
-				}
-
-				//LEFT & RIGHT
-				if ((currentBody->position.x <= body.position.x + body.circle.GetDiameter()) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.circle.GetDiameter()))
-				{
-					// Left wall
-					currentBody->position.x = body.circle.x + body.circle.radius;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-					currentBody->onLeftWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-				else if ((currentBody->position.x + currentBody->rect.w >= body.position.x) && !(currentBody->position.x >= body.position.x))
-				{
-					// Right wall
-					currentBody->position.x = body.circle.x - currentBody->rect.w;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-					currentBody->onRightWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-
-				//POSITION SET
-				currentBody->rect.x = (int)currentBody->position.x;
-				currentBody->rect.y = (int)currentBody->position.y;
-			}
-			else if (currentBody->colliderType == CIRCLE && body.colliderType == CIRCLE)
-			{
-				//TOP & DOWN
-				if (currentBody->position.y + currentBody->circle.GetDiameter() >= body.position.y && !(currentBody->position.y >= body.position.y) && (currentBody->position.y + currentBody->circle.GetDiameter() <= body.position.y + body.circle.GetDiameter()))
-				{
-					// Ground
-					currentBody->position.y = body.circle.y - currentBody->circle.radius;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-
-					currentBody->onGround = true;
-					currentBody->dashCount = 0;
-					if (currentBody->onJump)
-					{
-						currentBody->onJump = false;
-						if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					}
-					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-					if (currentBody->onDash) currentBody->onDash = false;
-				}
-				else if ((currentBody->position.y <= body.position.y + body.circle.GetDiameter()) && currentBody->position.y >= body.position.y && !(currentBody->position.y + currentBody->circle.GetDiameter() <= body.position.y + body.circle.GetDiameter()))
-				{
-					// Top
-					currentBody->position.y = body.circle.y + body.circle.radius;
-					currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
-					currentBody->onRoof = true;
-				}
-
-				//LEFT & RIGHT
-				if ((currentBody->position.x <= body.position.x + body.circle.GetDiameter()) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->circle.GetDiameter() <= body.position.x + body.circle.GetDiameter()))
-				{
-					// Left wall
-					currentBody->position.x = body.circle.x + currentBody->circle.radius;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-					currentBody->onLeftWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-				else if ((currentBody->position.x + currentBody->circle.GetDiameter() >= body.position.x) && !(currentBody->position.x >= body.position.x))
-				{
-					// Right wall
-					currentBody->position.x = body.circle.x - currentBody->circle.radius;
-					currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
-					currentBody->onRightWall = true;
-					if (currentBody->onWallJump) currentBody->onWallJump = false;
-				}
-
-				//POSITION SET
-				currentBody->circle.x = (int)currentBody->position.x;
-				currentBody->circle.y = (int)currentBody->position.y;
 			}
 
 			break;
@@ -1225,3 +1105,155 @@ double Body::ToPositiveAngle(double angle)
 
 	return angle;
 }
+
+//else if (currentBody->colliderType == RECTANGLE && body.colliderType == CIRCLE)
+//			{
+//			//TOP & DOWN
+//			if ((currentBody->position.y + currentBody->rect.h >= body.circle.y - body.circle.radius) && !(currentBody->position.y >= body.circle.y - body.circle.radius) && (currentBody->position.y + currentBody->rect.h <= body.circle.y + body.circle.radius))
+//			{
+//				// Ground
+//				currentBody->position.y = body.circle.y - body.circle.radius - currentBody->rect.h;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//
+//				currentBody->onGround = true;
+//				currentBody->dashCount = 0;
+//				if (currentBody->onJump)
+//				{
+//					currentBody->onJump = false;
+//					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				}
+//				if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//				if (currentBody->onDash) currentBody->onDash = false;
+//			}
+//			else if ((currentBody->position.y <= body.circle.y + body.circle.radius) && (currentBody->position.y >= body.circle.y - body.circle.radius) && !(currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.radius))
+//			{
+//				// Top
+//				currentBody->position.y = body.circle.y + body.circle.radius;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//				currentBody->onRoof = true;
+//			}
+//
+//			//LEFT & RIGHT
+//			if ((currentBody->position.x <= body.circle.x + body.circle.radius) && (currentBody->position.x >= body.circle.x - body.circle.radius) && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.circle.radius))
+//			{
+//				// Left wall
+//				currentBody->position.x = body.circle.x + body.circle.radius;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//
+//				currentBody->onLeftWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//			else if ((currentBody->position.x + currentBody->rect.w >= body.circle.x - body.circle.radius) && !(currentBody->position.x >= body.circle.x - body.circle.radius) && (currentBody->position.x + currentBody->rect.w <= body.circle.x + body.circle.radius))
+//			{
+//				// Right wall
+//				currentBody->position.x = body.circle.x - body.circle.radius - currentBody->rect.w;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//				currentBody->onRightWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//
+//			//POSITION SET
+//			currentBody->circle.x = (int)currentBody->position.x;
+//			currentBody->circle.y = (int)currentBody->position.y;
+//			}
+//else if (currentBody->colliderType == CIRCLE && body.colliderType == RECTANGLE)
+//			{
+//			//TOP & DOWN
+//			if (currentBody->position.y + currentBody->rect.h >= body.position.y && !(currentBody->position.y >= body.position.y) && (currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.GetDiameter()))
+//			{
+//				// Ground
+//				currentBody->position.y = body.circle.y - currentBody->rect.h;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//
+//				currentBody->dashCount = 0;
+//				currentBody->onGround = true;
+//				if (currentBody->onJump)
+//				{
+//					currentBody->onJump = false;
+//					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				}
+//				if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//				if (currentBody->onDash) currentBody->onDash = false;
+//			}
+//			else if ((currentBody->position.y <= body.position.y + body.circle.GetDiameter()) && currentBody->position.y >= body.position.y && !(currentBody->position.y + currentBody->rect.h <= body.position.y + body.circle.GetDiameter()))
+//			{
+//				// Top
+//				currentBody->position.y = body.circle.y + body.circle.radius;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//				currentBody->onRoof = true;
+//			}
+//
+//			//LEFT & RIGHT
+//			if ((currentBody->position.x <= body.position.x + body.circle.GetDiameter()) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->rect.w <= body.position.x + body.circle.GetDiameter()))
+//			{
+//				// Left wall
+//				currentBody->position.x = body.circle.x + body.circle.radius;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//				currentBody->onLeftWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//			else if ((currentBody->position.x + currentBody->rect.w >= body.position.x) && !(currentBody->position.x >= body.position.x))
+//			{
+//				// Right wall
+//				currentBody->position.x = body.circle.x - currentBody->rect.w;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//				currentBody->onRightWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//
+//			//POSITION SET
+//			currentBody->rect.x = (int)currentBody->position.x;
+//			currentBody->rect.y = (int)currentBody->position.y;
+//			}
+//else if (currentBody->colliderType == CIRCLE && body.colliderType == CIRCLE)
+//			{
+//			//TOP & DOWN
+//			if (currentBody->position.y + currentBody->circle.GetDiameter() >= body.position.y && !(currentBody->position.y >= body.position.y) && (currentBody->position.y + currentBody->circle.GetDiameter() <= body.position.y + body.circle.GetDiameter()))
+//			{
+//				// Ground
+//				currentBody->position.y = body.circle.y - currentBody->circle.radius;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//
+//				currentBody->onGround = true;
+//				currentBody->dashCount = 0;
+//				if (currentBody->onJump)
+//				{
+//					currentBody->onJump = false;
+//					if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				}
+//				if (currentBody->onDoubleJump) currentBody->onDoubleJump = false;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//				if (currentBody->onDash) currentBody->onDash = false;
+//			}
+//			else if ((currentBody->position.y <= body.position.y + body.circle.GetDiameter()) && currentBody->position.y >= body.position.y && !(currentBody->position.y + currentBody->circle.GetDiameter() <= body.position.y + body.circle.GetDiameter()))
+//			{
+//				// Top
+//				currentBody->position.y = body.circle.y + body.circle.radius;
+//				currentBody->velocity.y = -currentBody->velocity.y * currentBody->coeficientRestitution.y;
+//				currentBody->onRoof = true;
+//			}
+//
+//			//LEFT & RIGHT
+//			if ((currentBody->position.x <= body.position.x + body.circle.GetDiameter()) && currentBody->position.x >= body.position.x && !(currentBody->position.x + currentBody->circle.GetDiameter() <= body.position.x + body.circle.GetDiameter()))
+//			{
+//				// Left wall
+//				currentBody->position.x = body.circle.x + currentBody->circle.radius;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//				currentBody->onLeftWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//			else if ((currentBody->position.x + currentBody->circle.GetDiameter() >= body.position.x) && !(currentBody->position.x >= body.position.x))
+//			{
+//				// Right wall
+//				currentBody->position.x = body.circle.x - currentBody->circle.radius;
+//				currentBody->velocity.x = -currentBody->velocity.x * currentBody->coeficientRestitution.x;
+//				currentBody->onRightWall = true;
+//				if (currentBody->onWallJump) currentBody->onWallJump = false;
+//			}
+//
+//			//POSITION SET
+//			currentBody->circle.x = (int)currentBody->position.x;
+//			currentBody->circle.y = (int)currentBody->position.y;
+//			}

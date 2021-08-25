@@ -259,6 +259,10 @@ public:
 	void ApplyForce(fPoint newtons);
 	// Applies an specific force to this body
 	void ApplyForce(float newtonsX = 0, float newtonsY = 0);
+	// Applies an specific force to this body
+	void ApplyMomentum(fPoint momentum);
+	// Applies an specific force to this body
+	void ApplyMomentum(float momentumX, float momentumY);
 	//This function returns a debug bool by inputting which one you want to receive
 	bool GetDebugBools(DebugBools dBool) const
 	{
@@ -287,6 +291,7 @@ private:
 	friend class Player;
 
 	void SecondNewton();
+	void FirstBuxeda();
 	void ApplyFriction(float dt);
 	void ApplyBuoyancy();
 	void ApplyHidroDrag();
@@ -300,10 +305,12 @@ private:
 	fPoint gravityAcceleration;
 	fPoint acceleration = {};
 	fPoint sumForces = { 0.0f, 0.0f };
+	fPoint sumMomentum = {0.0f, 0.0f};
 	fPoint coeficientRestitution = { 1.0f,1.0f };
 	fPoint frictionCoeficient = { 0.0f,0.0f };
 	float hydroControlParameter = 0.0f;
 	DynArray<fPoint> forces = {};
+	DynArray<fPoint> momentums = {};
 	bool onGround = false, onRoof = false, onLeftWall = false, onRightWall = false, onJump = false, onDoubleJump = false, onWallJump = false, onDash = false, onAir = false, onWater = false;
 	int dashCount = 0;
 	//Will be deleted
