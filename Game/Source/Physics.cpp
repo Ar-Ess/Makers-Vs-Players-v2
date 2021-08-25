@@ -806,7 +806,7 @@ void DynamicBody::Move(float newtons, Direction dir, float velocityLimiter)
 	}
 }
 
-void DynamicBody::Dash(float newtons, DashDirection dDir, uint dashLimit)
+void DynamicBody::Dash(float moment, DashDirection dDir, uint dashLimit)
 {
 	if (!onGround && !onLeftWall && !onRightWall && !onRoof) //if (onAir)
 	{
@@ -819,60 +819,62 @@ void DynamicBody::Dash(float newtons, DashDirection dDir, uint dashLimit)
 			this->onDoubleJump = false;
 			this->onWallJump = false;
 
-			newtons = abs(newtons);
+			moment = abs(moment);
 
 			switch (dDir)
 			{
 			case DashDirection::UP:
-				this->ApplyForce({ 0.0f, -newtons });
+				this->ApplyMomentum({ 0.0f, -moment });
 				break;
 
 			case DashDirection::DOWN:
-				this->ApplyForce({ 0.0f, newtons });
+				this->ApplyMomentum({ 0.0f, moment });
 				break;
 
 			case DashDirection::LEFT:
-				this->ApplyForce({ -newtons, 0.0f });
+				this->ApplyMomentum({ -moment, 0.0f });
 				break;
 
 			case DashDirection::RIGHT:
-				this->ApplyForce({ newtons, 0.0f });
+				this->ApplyMomentum({ moment, 0.0f });
 				break;
 
 			case DashDirection::UPLEFT:
-				this->ApplyForce({ -newtons, -newtons });
+				this->ApplyMomentum({ -moment, -moment });
 				break;
 
 			case DashDirection::DOWNLEFT:
-				this->ApplyForce({ -newtons, newtons });
+				this->ApplyMomentum({ -moment, moment });
 				break;
 
 			case DashDirection::UPRIGHT:
-				this->ApplyForce({ newtons, -newtons });
+				this->ApplyMomentum({ moment, -moment });
 				break;
 
 			case DashDirection::DOWNRIGHT:
-				this->ApplyForce({ newtons, newtons });
+				this->ApplyMomentum({ moment, moment });
 				break;
 			}
 		}
 	}
 }
 
-void DynamicBody::Jump(float newtonsY, bool doubleJump)
+void DynamicBody::Jump(float momentY, bool doubleJump)
 {
-	newtonsY = abs(newtonsY) * -1;
+	momentY = abs(momentY) * -1;
 
+	// DOUBLE JUMPOOO
 	if (doubleJump && !onDoubleJump && !onWallJump && onJump && !onLeftWall && !onRightWall)
 	{
-		this->ApplyMomentum({ 0.0f, newtonsY / 2 });
+		this->ApplyMomentum({ 0.0f, momentY / 2});
 		onDoubleJump = true;
 		onJump = false;
 	}
 
+	// JUMP
 	if (onGround && !onJump)
 	{
-		this->ApplyMomentum({0.0f, newtonsY });
+		this->ApplyMomentum({ 0.0f, momentY });
 		onJump = true;
 	}
 }

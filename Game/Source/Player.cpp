@@ -53,7 +53,7 @@ void Player::PlayerControls()
 {
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		body->Jump(-750.0f, false);
+		body->Jump(760.0f, true);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
