@@ -8,7 +8,7 @@ Coin::Coin()
 {
 }
 
-Coin::Coin(fPoint pos, iPoint coords, LevelEditor* lE)
+Coin::Coin(fPoint pos, iPoint coords, LevelEditor* lE, Z axis)
 {
 	position = pos;
 	coordinates = coords;
@@ -31,6 +31,7 @@ Coin::Coin(fPoint pos, iPoint coords, LevelEditor* lE)
 	body->SetCollidable(false);
 
 	rect = {(int)pos.x + 12, (int)pos.y + 6, 53 - 24, 53 - 12};
+	zAxis = axis;
 
 	for (int i = 0; i < 9; i++) coinAnim.PushBack({53 * i, 0, 53, 53});
 	coinAnim.loop = true;

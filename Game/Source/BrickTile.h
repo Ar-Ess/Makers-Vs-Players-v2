@@ -22,7 +22,7 @@ public:
 
 	BrickTile();
 
-	BrickTile(fPoint pos, iPoint coords, LevelEditor* lE);
+	BrickTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis);
 
 	~BrickTile();
 

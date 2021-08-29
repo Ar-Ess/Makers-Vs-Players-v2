@@ -17,7 +17,15 @@ enum class TileType
 	GROUND,
 	COIN,
 	BRICK,
-	SPIKE_TRAP
+	SPIKE_TRAP,
+	ARROW_SIGN
+};
+
+enum class Z
+{
+	BACK,
+	MID,
+	FRONT
 };
 
 class Tile
@@ -52,10 +60,11 @@ public:
 	SDL_Texture* texture = nullptr;
 	LevelEditor* editor = nullptr;
 	TileType type = TileType::NO_TILE;
+	Z zAxis;
 	fPoint position;
 	iPoint coordinates;
 	Utils utils;
-	bool debug = false;
+	bool fourByFour = false;
 
 };
 

@@ -14,7 +14,7 @@ public: //Functions
 
 	GroundTile();
 
-	GroundTile(fPoint pos, iPoint coords, LevelEditor* lE);
+	GroundTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis);
 
 	~GroundTile();
 

@@ -10,7 +10,7 @@ GroundTile::GroundTile()
 
 }
 
-GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE)
+GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis)
 {
 	switch (lE->GetBackground())
 	{
@@ -26,6 +26,7 @@ GroundTile::GroundTile(fPoint pos, iPoint coords, LevelEditor* lE)
 	position = pos;
 	coordinates = coords;
 	editor = lE;
+	zAxis = axis;
 	type = TileType::GROUND;
 	body = (StaticBody*)editor->phys->CreateBody(BodyType::STATIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE });
 }

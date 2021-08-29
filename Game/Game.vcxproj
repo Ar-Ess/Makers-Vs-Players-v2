@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ArrowSignTile.cpp" />
     <ClCompile Include="Source\AssetsManager.cpp" />
     <ClCompile Include="Source\Boss.cpp" />
     <ClCompile Include="Source\BrickTile.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="Source\Transition.cpp" />
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="Source\Animation.h" />
+    <ClInclude Include="Source\ArrowSignTile.h" />
     <ClInclude Include="Source\AssetsManager.h" />
     <ClInclude Include="Source\Boss.h" />
     <ClInclude Include="Source\BrickTile.h" />

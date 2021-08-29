@@ -11,7 +11,7 @@ SpikeTrapTile::SpikeTrapTile()
 
 }
 
-SpikeTrapTile::SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE)
+SpikeTrapTile::SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis)
 {
 	switch (lE->GetBackground())
 	{
@@ -27,6 +27,7 @@ SpikeTrapTile::SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE)
 	position = pos;
 	coordinates = coords;
 	editor = lE;
+	zAxis = axis;
 	type = TileType::SPIKE_TRAP;
 	body = (StaticBody*)editor->phys->CreateBody(BodyType::STATIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE });
 }

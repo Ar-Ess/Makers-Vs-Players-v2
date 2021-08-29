@@ -11,7 +11,7 @@ BrickTile::BrickTile()
 {
 }
 
-BrickTile::BrickTile(fPoint pos, iPoint coords, LevelEditor* lE)
+BrickTile::BrickTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis)
 {
 	switch (lE->GetBackground())
 	{
@@ -28,6 +28,7 @@ BrickTile::BrickTile(fPoint pos, iPoint coords, LevelEditor* lE)
 	coordinates = coords;
 	editor = lE;
 	type = TileType::BRICK;
+	zAxis = axis;
 	state = BrickState::BRICK;
 	body = (StaticBody*)editor->phys->CreateBody(BodyType::STATIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE });
 

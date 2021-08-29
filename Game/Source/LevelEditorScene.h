@@ -38,7 +38,8 @@ enum class Selection
 	GROUND,
 	COIN,
 	BRICK,
-	SPIKE_TRAP
+	SPIKE_TRAP,
+	ARROW_SIGN
 };
 
 enum class Background
@@ -91,6 +92,7 @@ private:
 	void ScreenRemoving(int screen);
 	void SelectionPlacement();
 	void TileRemoveLogic();
+	void RotationLogic();
 	iPoint GetCoordsFromMousePos();
 	bool TileExistance(iPoint coords);
 	void DeleteTile(iPoint coords);
@@ -114,6 +116,7 @@ private:
 	int currScreen = 0;
 	const int wTileScreen[11] = {0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240};
 	const int maxScreens = 10;
+	int arrowAngle = 0;
 	iPoint deltaPosition = {};
 
 	Selection select = Selection::NO_SELECT;

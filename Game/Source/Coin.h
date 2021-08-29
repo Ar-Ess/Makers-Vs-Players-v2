@@ -22,7 +22,7 @@ public:
 
     Coin();
 
-    Coin(fPoint pos, iPoint coords, LevelEditor* lE);
+    Coin(fPoint pos, iPoint coords, LevelEditor* lE, Z axis);
 
     virtual ~Coin();
 

@@ -117,6 +117,9 @@
     <ClCompile Include="Source\SpikeTrapTile.cpp">
       <Filter>Entities\Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ArrowSignTile.cpp">
+      <Filter>Entities\Signs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -288,6 +291,9 @@
     <ClInclude Include="Source\SpikeTrapTile.h">
       <Filter>Entities\Tiles</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ArrowSignTile.h">
+      <Filter>Entities\Signs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -322,6 +328,9 @@
     </Filter>
     <Filter Include="Entities\Items">
       <UniqueIdentifier>{21f9ea27-e6c5-44de-bcb3-bbc39d6813df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Signs">
+      <UniqueIdentifier>{478d061a-539e-48b3-9916-57a07f86765c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ public: //Functions
 
 	SpikeTrapTile();
 
-	SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE);
+	SpikeTrapTile(fPoint pos, iPoint coords, LevelEditor* lE, Z axis);
 
 	~SpikeTrapTile();
 
