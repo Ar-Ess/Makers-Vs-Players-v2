@@ -199,7 +199,7 @@ void LevelEditor::UpdateEditor(float dt)
 	PlayerDragLogic();
 	RotationLogic();
 
-	SelectionPlacement();
+	TilePlaceLogic();
 	TileRemoveLogic();
 }
 
@@ -281,50 +281,51 @@ void LevelEditor::ScreenRemoving(int screen)
 	{
 		for (int y = 0; y < TILE_PER_SCREEN_H; y++)
 		{
-			if (TileExistance(iPoint{ x, y })) DeleteTile(iPoint{ x, y });
+			if (TileExistance(iPoint{ x, y })) DeleteTileLogic(iPoint{ x, y });
 		}
 	}
 }
 
-void LevelEditor::SelectionPlacement()
+void LevelEditor::TilePlaceLogic()
 {
 	if ((int)select > 1 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
 		iPoint coord = GetCoordsFromMousePos();
-		GroundTile* gT = nullptr;
-		Coin* c = nullptr;
-		BrickTile* bT = nullptr;
-		SpikeTrapTile* sTT = nullptr;
-		ArrowSignTile* aST = nullptr;
 
 		if (TileExistance(coord)) return;
 
 		switch (select)
 		{
 		case Selection::GROUND:
-			gT = new GroundTile({float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE)}, coord, this, Z::MID);
+		{
+			GroundTile* gT = new GroundTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::MID);
 			tiles.Add(gT);
 			break;
-
+		}
 		case Selection::COIN:
-			c = new Coin({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::FRONT);
+		{
+			Coin* c = new Coin({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::FRONT);
 			tiles.Add(c);
 			break;
-
+		}
 		case Selection::BRICK:
-			bT = new BrickTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::MID);
+		{
+			BrickTile* bT = new BrickTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::MID);
 			tiles.Add(bT);
 			break;
-
+		}
 		case Selection::SPIKE_TRAP:
-			sTT = new SpikeTrapTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::MID);
+		{
+			SpikeTrapTile* sTT = new SpikeTrapTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::MID);
 			tiles.Add(sTT);
 			break;
-
+		}
 		case Selection::ARROW_SIGN:
-			aST = new ArrowSignTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::BACK, arrowAngle);
+		{
+			ArrowSignTile* aST = new ArrowSignTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::BACK, arrowAngle);
 			tiles.Add(aST);
 			break;
+		}
 		}
 	}
 }
@@ -337,7 +338,7 @@ void LevelEditor::TileRemoveLogic()
 
 		if (!TileExistance(coord)) return;
 
-		DeleteTile(coord);
+		DeleteTileLogic(coord);
 	}
 }
 
@@ -371,6 +372,15 @@ iPoint LevelEditor::GetCoordsFromMousePos()
 	return coords;
 }
 
+Tile* LevelEditor::GetTileFromCoords(iPoint coords)
+{
+	for (int i = 0; i < tiles.Count(); i++)
+	{
+		if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+	}
+	return nullptr;
+}
+
 bool LevelEditor::TileExistance(iPoint coords)
 {
 	ListItem<Tile*>* list;
@@ -378,13 +388,10 @@ bool LevelEditor::TileExistance(iPoint coords)
 	{
 		if (list->data->fourByFour)
 		{
-			if (select == Selection::ARROW_SIGN)
-			{
-				SDL_Rect newArrow = { coords.x, coords.y, 2, 2 };
-				SDL_Rect oldArrow = { list->data->coordinates.x, list->data->coordinates.y, 2, 2 };
+			SDL_Rect newArrow = { coords.x, coords.y, 2, 2 };
+			SDL_Rect oldArrow = { list->data->coordinates.x, list->data->coordinates.y, 2, 2 };
 
-				if (utils.CheckCollisionLimits(newArrow, oldArrow)) return true;
-			}
+			if (utils.CheckCollisionLimits(newArrow, oldArrow)) return true;
 		}
 		else
 		{
@@ -395,7 +402,7 @@ bool LevelEditor::TileExistance(iPoint coords)
 	return false;
 }
 
-void LevelEditor::DeleteTile(iPoint coords)
+void LevelEditor::DeleteTileLogic(iPoint coords)
 {
 	ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next)

@@ -90,12 +90,13 @@ private:
 	void CameraDisplace();
 	void ScreenAddition();
 	void ScreenRemoving(int screen);
-	void SelectionPlacement();
+	void TilePlaceLogic();
 	void TileRemoveLogic();
 	void RotationLogic();
 	iPoint GetCoordsFromMousePos();
+	Tile* GetTileFromCoords(iPoint coords);
 	bool TileExistance(iPoint coords);
-	void DeleteTile(iPoint coords);
+	void DeleteTileLogic(iPoint coords);
 	void PlayerDragLogic();
 	bool IsMouseInPlayer();
 	iPoint GetMousePosInPlayer(iPoint pos);
