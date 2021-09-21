@@ -136,6 +136,9 @@ void LevelEditor::DebugDraw()
 	{
 		SDL_Rect cam = app->render->camera;
 		app->render->DrawRectangle({ -cam.x, -cam.y, 1280, 100 }, { 255, 0, 0, 100 });
+		app->render->DrawRectangle({ -cam.x, -cam.y + 720 - 70, 1280, 70 }, { 255, 0, 0, 100 });
+		app->render->DrawRectangle({ -cam.x, -cam.y + 100, 150, 550 }, { 205, 50, 50, 100 });
+		app->render->DrawRectangle({ -cam.x + 1280 - 114, -cam.y + 100, 114, 550 }, { 205, 50, 50, 100 });
 	}
 }
 
@@ -303,6 +306,12 @@ void LevelEditor::TilePlaceLogic()
 {
 	if ((int)select > 1 && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
+		SDL_Rect cam = app->render->camera;
+		iPoint mPos = {};
+		app->input->GetMousePosition(mPos.x, mPos.y);
+
+		if (menu && !utils.CheckCollision({ -cam.x + 150, -cam.y + 100, 1016, 550 }, {mPos.x - cam.x, mPos.y - cam.y, 1, 1})) return;
+
 		iPoint coord = GetCoordsFromMousePos();
 
 		if (TileExistance(coord)) return;
@@ -347,6 +356,12 @@ void LevelEditor::TileRemoveLogic()
 {
 	if (select == Selection::ERASE && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
 	{
+		SDL_Rect cam = app->render->camera;
+		iPoint mPos = {};
+		app->input->GetMousePosition(mPos.x, mPos.y);
+
+		if (menu && !utils.CheckCollision({ -cam.x + 150, -cam.y + 100, 1016, 550 }, { mPos.x - cam.x, mPos.y - cam.y, 1, 1 })) return;
+
 		iPoint coord = GetCoordsFromMousePos();
 
 		if (!TileExistance(coord)) return;
