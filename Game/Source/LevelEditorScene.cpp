@@ -131,6 +131,12 @@ void LevelEditor::DebugDraw()
 	Uint8 alpha = 230 / ((Uint8)state + 1);
 	for (int i = 0; i < wTileScreen[currScreen + 1]; i++) app->render->DrawLine((i + 1) * TILE_SIZE, MAX_SCREEN_Y, (i + 1) * TILE_SIZE, 0, {100, 100, 100, alpha });
 	for (int i = 0; i < TILE_PER_SCREEN_H; i++) app->render->DrawLine(MAX_SCREEN_X, i * TILE_SIZE, 0, i * TILE_SIZE, { 100, 100, 100, alpha });
+	
+	if (menu)
+	{
+		SDL_Rect cam = app->render->camera;
+		app->render->DrawRectangle({ -cam.x, -cam.y, 1280, 100 }, { 255, 0, 0, 100 });
+	}
 }
 
 void LevelEditor::CleanUp()
@@ -290,12 +296,6 @@ void LevelEditor::ScreenRemoving(int screen)
 
 void LevelEditor::TileMenuLogic()
 {
-	if (menu)
-	{
-		SDL_Rect cam = app->render->camera;
-		app->render->DrawRectangle({ -cam.x, -cam.y, 1280, 250 }, {255, 0, 0, 100});
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) menu = !menu;
 }
 
