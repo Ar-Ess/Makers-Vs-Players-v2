@@ -46,6 +46,7 @@ public: //Functions
 private:
 
 	StaticBody* body = nullptr;
+	Animation spikeAnim;
 };
 
 #endif // __SPIKETRAPTILE_H__
