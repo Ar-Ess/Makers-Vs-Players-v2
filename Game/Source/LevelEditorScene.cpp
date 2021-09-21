@@ -36,6 +36,7 @@ void LevelEditor::Start()
 	player->Start();
 	state = EditorState::EDITING;
 	bg = Background::SKY;
+	menu = true;
 
 	LoadBackgroundImages();
 }
@@ -199,6 +200,7 @@ void LevelEditor::UpdateEditor(float dt)
 	PlayerDragLogic();
 	RotationLogic();
 
+	TileMenuLogic();
 	TilePlaceLogic();
 	TileRemoveLogic();
 }
@@ -284,6 +286,17 @@ void LevelEditor::ScreenRemoving(int screen)
 			if (TileExistance(iPoint{ x, y })) DeleteTileLogic(iPoint{ x, y });
 		}
 	}
+}
+
+void LevelEditor::TileMenuLogic()
+{
+	if (menu)
+	{
+		SDL_Rect cam = app->render->camera;
+		app->render->DrawRectangle({ -cam.x, -cam.y, 1280, 250 }, {255, 0, 0, 100});
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) menu = !menu;
 }
 
 void LevelEditor::TilePlaceLogic()

@@ -90,6 +90,7 @@ private:
 	void CameraDisplace();
 	void ScreenAddition();
 	void ScreenRemoving(int screen);
+	void TileMenuLogic();
 	void TilePlaceLogic();
 	void TileRemoveLogic();
 	void RotationLogic();
@@ -118,6 +119,7 @@ private:
 	const int wTileScreen[11] = {0, 24, 48, 72, 96, 120, 144, 168, 192, 216, 240};
 	const int maxScreens = 10;
 	int arrowAngle = 0;
+	bool menu = false;
 	iPoint deltaPosition = {};
 
 	Selection select = Selection::NO_SELECT;
