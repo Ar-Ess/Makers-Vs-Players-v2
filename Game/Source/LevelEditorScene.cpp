@@ -292,7 +292,8 @@ void LevelEditor::ScreenRemoving(int screen)
 	{
 		for (int y = 0; y < TILE_PER_SCREEN_H; y++)
 		{
-			if (TileExistance(iPoint{ x, y })) DeleteTileLogic(iPoint{ x, y });
+			iPoint coord = {x, y};
+			if (TileExistance(coord, GetTileFromCoords(coord)->type)) DeleteTileLogic(coord);
 		}
 	}
 }
@@ -314,7 +315,7 @@ void LevelEditor::TilePlaceLogic()
 
 		iPoint coord = GetCoordsFromMousePos();
 
-		if (TileExistance(coord)) return;
+		if (TileExistance(coord, select)) return;
 
 		switch (select)
 		{
@@ -364,7 +365,7 @@ void LevelEditor::TileRemoveLogic()
 
 		iPoint coord = GetCoordsFromMousePos();
 
-		if (!TileExistance(coord)) return;
+		if (!TileExistance(coord, GetTileFromCoords(coord)->type)) return; // Returns nullptr because when click on other place other the original tile, does not detect the tile
 
 		DeleteTileLogic(coord);
 	}
@@ -404,7 +405,14 @@ Tile* LevelEditor::GetTileFromCoords(iPoint coords)
 {
 	for (int i = 0; i < tiles.Count(); i++)
 	{
-		if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+		if (!tiles.At(i)->data->fourByFour) if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+		else
+		{
+			if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{coords.x + 1, coords.y}) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{ coords.x + 1, coords.y + 1 }) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{ coords.x, coords.y + 1 }) return tiles.At(i)->data;
+		}
 	}
 	return nullptr;
 }
@@ -414,17 +422,49 @@ bool LevelEditor::TileExistance(iPoint coords)
 	ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next)
 	{
-		if (list->data->fourByFour)
-		{
-			SDL_Rect newArrow = { coords.x, coords.y, 2, 2 };
-			SDL_Rect oldArrow = { list->data->coordinates.x, list->data->coordinates.y, 2, 2 };
+		if (list->data->coordinates == coords) return true;
+	}
 
-			if (utils.CheckCollisionLimits(newArrow, oldArrow)) return true;
-		}
-		else
-		{
-			if (list->data->coordinates == coords) return true;
-		}
+	return false;
+}
+
+bool LevelEditor::TileExistance(iPoint coords, Selection select)
+{
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next)
+	{
+		SDL_Rect actualTile = {list->data->coordinates.x, list->data->coordinates.y, 1, 1};
+		SDL_Rect newTile = {coords.x, coords.y, 1, 1};
+
+		//Modifying actual tile
+		if (list->data->fourByFour) actualTile = { list->data->coordinates.x, list->data->coordinates.y, 2, 2 };
+
+		// Modifying new tile
+		if (select == Selection::ARROW_SIGN) newTile = { coords.x, coords.y, 2, 2 }; // Add all 4x4 tiles
+
+		// Computing collision
+		if (utils.CheckCollisionLimits(actualTile, newTile)) return true;
+	}
+
+	return false;
+}
+
+bool LevelEditor::TileExistance(iPoint coords, TileType type)
+{
+	ListItem<Tile*>* list;
+	for (list = tiles.start; list != nullptr; list = list->next)
+	{
+		SDL_Rect actualTile = { list->data->coordinates.x, list->data->coordinates.y, 1, 1 };
+		SDL_Rect newTile = { coords.x, coords.y, 1, 1 };
+
+		//Modifying actual tile
+		if (list->data->fourByFour) actualTile = { list->data->coordinates.x, list->data->coordinates.y, 2, 2 };
+
+		// Modifying new tile
+		if (type == TileType::ARROW_SIGN) newTile = { coords.x, coords.y, 2, 2 }; // Add all 4x4 tiles
+
+		// Computing collision
+		if (utils.CheckCollisionLimits(actualTile, newTile)) return true;
 	}
 
 	return false;
@@ -432,7 +472,13 @@ bool LevelEditor::TileExistance(iPoint coords)
 
 void LevelEditor::DeleteTileLogic(iPoint coords)
 {
-	ListItem<Tile*>* list;
+	Tile* destroyed = GetTileFromCoords(coords);
+	if (destroyed->GetBody() != nullptr) phys->DestroyBody(destroyed->GetBody());
+	delete destroyed;
+	tiles.Del(tiles.At(tiles.Find(destroyed)));
+	return;
+
+	/*ListItem<Tile*>* list;
 	for (list = tiles.start; list != nullptr; list = list->next)
 	{
 		if (list->data->fourByFour)
@@ -462,7 +508,7 @@ void LevelEditor::DeleteTileLogic(iPoint coords)
 			}
 		}
 	}
-	return;
+	return;*/
 }
 
 void LevelEditor::PlayerDragLogic()

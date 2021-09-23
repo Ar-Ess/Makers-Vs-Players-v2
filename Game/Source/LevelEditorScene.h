@@ -18,6 +18,7 @@
 #include "List.h"
 #include "Point.h"
 #include "Utils.h"
+#include "Tile.h"
 
 class Player;
 class Physics;
@@ -96,7 +97,12 @@ private:
 	void RotationLogic();
 	iPoint GetCoordsFromMousePos();
 	Tile* GetTileFromCoords(iPoint coords);
+	// This function only works between 1x1 tile checking
 	bool TileExistance(iPoint coords);
+	// This function works for all type of tiles (1x1, 2x2...) but asking for the selection (specially for TilePlaceLogic() function)
+	bool TileExistance(iPoint coords, Selection select);
+	// This function works for all type of tiles (1x1, 2x2...) but asking for the type of the tile (specially for TileRemoveLogic() function)
+	bool TileExistance(iPoint coords, TileType type);
 	void DeleteTileLogic(iPoint coords);
 	void PlayerDragLogic();
 	bool IsMouseInPlayer();
