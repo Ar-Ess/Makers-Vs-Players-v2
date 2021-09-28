@@ -18,7 +18,8 @@ enum class TileType
 	COIN,
 	BRICK,
 	SPIKE_TRAP,
-	ARROW_SIGN
+	ARROW_SIGN,
+	CHAMPI
 };
 
 enum class Z

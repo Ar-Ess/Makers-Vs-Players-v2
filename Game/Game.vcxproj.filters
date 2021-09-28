@@ -120,6 +120,9 @@
     <ClCompile Include="Source\ArrowSignTile.cpp">
       <Filter>Entities\Signs</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Champi.cpp">
+      <Filter>Entities\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -270,9 +273,6 @@
     <ClInclude Include="Source\LevelEditorScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tile.h">
-      <Filter>Entities\Tiles</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GroundTile.h">
       <Filter>Entities\Tiles</Filter>
     </ClInclude>
@@ -293,6 +293,12 @@
     </ClInclude>
     <ClInclude Include="Source\ArrowSignTile.h">
       <Filter>Entities\Signs</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Champi.h">
+      <Filter>Entities\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tile.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -223,6 +223,7 @@ void LevelEditor::TileSelectionLogic()
 	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN) select = Selection::BRICK;
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN) select = Selection::SPIKE_TRAP;
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN) select = Selection::ARROW_SIGN;
+	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN) select = Selection::CHAMPI;
 }
 
 void LevelEditor::CameraDisplace()
