@@ -284,6 +284,13 @@ public:
 	}
 	// Restart the accelerations/velocities applied to the body
 	void ResetForces();
+	// Change the position of the body
+	void SetPosition(fPoint newPosition)
+	{
+		position = newPosition;
+		rect.x = newPosition.x;
+		rect.y = newPosition.y;
+	}
 
 private:
 

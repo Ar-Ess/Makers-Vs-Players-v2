@@ -24,10 +24,10 @@ Champi::Champi(fPoint pos, iPoint coords, LevelEditor* lE, Z axis)
 		break;
 	}
 
-	body = (DynamicBody*)editor->phys->CreateBody(BodyType::DYNAMIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE });
-	body->SetCollidable(false);
+	body = (DynamicBody*)editor->phys->CreateBody(BodyType::DYNAMIC_BODY, pos, { (int)pos.x, (int)pos.y, TILE_SIZE, TILE_SIZE }, { 0, 0 }, { 0, 0 }, 1.0f);
+	//body->SetCollidable(false);
 
-	rect = { (int)pos.x + 12, (int)pos.y + 6, 53 - 24, 53 - 12 };
+	rect = { (int)pos.x, (int)pos.y, 53, 53 };
 	zAxis = axis;
 
 	/*for (int i = 0; i < 9; i++) champiAnim.PushBack({ 53 * i, 0, 53, 53 });
@@ -41,13 +41,17 @@ Champi::~Champi()
 
 void Champi::Update(float dt)
 {
-	body->Move(5.0f, Direction::RIGHT, 5.0f);
+	//body->Move(45.0f, Direction::RIGHT, 45.0f);
 }
 
 void Champi::Draw(float dt)
 {
+	bool debug = editor->phys->debug;
+
+	if (debug) app->render->DrawRectangle(rect, { 200, 200, 0, 150 });
 }
 
 void Champi::Restart()
 {
+	body->SetPosition(fPoint{float(coordinates.x * 53), float(coordinates.y * 53)});
 }

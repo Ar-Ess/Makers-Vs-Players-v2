@@ -11,6 +11,7 @@
 #include "BrickTile.h"
 #include "SpikeTrapTile.h"
 #include "ArrowSignTile.h"
+#include "Champi.h"
 
 #include "Log.h"
 
@@ -348,6 +349,12 @@ void LevelEditor::TilePlaceLogic()
 		{
 			ArrowSignTile* aST = new ArrowSignTile({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::BACK, arrowAngle);
 			tiles.Add(aST);
+			break;
+		}
+		case Selection::CHAMPI:
+		{
+			Champi* c = new Champi({ float(coord.x * TILE_SIZE), float(coord.y * TILE_SIZE) }, coord, this, Z::FRONT);
+			tiles.Add(c);
 			break;
 		}
 		}
