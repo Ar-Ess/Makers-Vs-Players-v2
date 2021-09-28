@@ -365,7 +365,10 @@ void LevelEditor::TileRemoveLogic()
 
 		iPoint coord = GetCoordsFromMousePos();
 
-		if (!TileExistance(coord, GetTileFromCoords(coord)->type)) return; // Returns nullptr because when click on other place other the original tile, does not detect the tile
+		Tile* erase = GetTileFromCoords(coord);
+		if (erase == nullptr) return;
+
+		if (!TileExistance(coord, erase->type)) return; // Returns nullptr because when click on other place other the original tile, does not detect the tile
 
 		DeleteTileLogic(coord);
 	}
@@ -405,13 +408,16 @@ Tile* LevelEditor::GetTileFromCoords(iPoint coords)
 {
 	for (int i = 0; i < tiles.Count(); i++)
 	{
-		if (!tiles.At(i)->data->fourByFour) if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+		if (!tiles.At(i)->data->fourByFour)
+		{
+			if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
+		}
 		else
 		{
 			if (tiles.At(i)->data->coordinates == coords) return tiles.At(i)->data;
-			if (tiles.At(i)->data->coordinates == iPoint{coords.x + 1, coords.y}) return tiles.At(i)->data;
-			if (tiles.At(i)->data->coordinates == iPoint{ coords.x + 1, coords.y + 1 }) return tiles.At(i)->data;
-			if (tiles.At(i)->data->coordinates == iPoint{ coords.x, coords.y + 1 }) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{coords.x - 1, coords.y}) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{ coords.x - 1, coords.y - 1 }) return tiles.At(i)->data;
+			if (tiles.At(i)->data->coordinates == iPoint{ coords.x, coords.y - 1 }) return tiles.At(i)->data;
 		}
 	}
 	return nullptr;
