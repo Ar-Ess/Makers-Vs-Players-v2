@@ -36,6 +36,10 @@ GroundTile::~GroundTile()
 	delete body;
 }
 
+void GroundTile::Start()
+{
+}
+
 void GroundTile::Update(float dt)
 {
 	return;

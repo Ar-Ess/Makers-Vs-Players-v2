@@ -46,6 +46,10 @@ SpikeTrapTile::~SpikeTrapTile()
 	delete body;
 }
 
+void SpikeTrapTile::Start()
+{
+}
+
 void SpikeTrapTile::Update(float dt)
 {
 	if (editor->phys->ReturnPlayerCollision() == body)

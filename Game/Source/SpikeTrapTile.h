@@ -20,6 +20,8 @@ public: //Functions
 
 	~SpikeTrapTile();
 
+	void Start();
+
 	void Update(float dt);
 
 	void Draw(float dt);

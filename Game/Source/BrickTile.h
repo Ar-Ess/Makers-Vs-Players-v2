@@ -26,6 +26,8 @@ public:
 
 	~BrickTile();
 
+	void Start();
+
 	void Update(float dt);
 
 	void Draw(float dt);

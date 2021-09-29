@@ -26,11 +26,18 @@ public:
 
     virtual ~Coin();
 
+    void Start();
+
     void Update(float dt);
 
     void Draw(float dt);
 
     void Restart();
+
+    Body* GetBody()
+    {
+        return (Body*)body;
+    }
 
 private:
     CoinState state = CoinState::COIN;

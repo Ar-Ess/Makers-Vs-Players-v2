@@ -42,6 +42,10 @@ Coin::~Coin()
 {
 }
 
+void Coin::Start()
+{
+}
+
 void Coin::Update(float dt) // Function only reached when preview state
 {
 	if (state == CoinState::COIN && utils.CheckCollision(rect, editor->player->body->ReturnBodyRect())) state = CoinState::COLLECTED;

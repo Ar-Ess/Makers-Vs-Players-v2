@@ -375,12 +375,13 @@ void Physics::ChangeGravityAcceleration(fPoint acceleration)
 	ListItem<Body*>* list;
 	for (list = bodyList.start; list != NULL; list = list->next)
 	{
+		fPoint acc = acceleration;
 		switch (list->data->bodyType)
 		{
 		case BodyType::DYNAMIC_BODY:
 			DynamicBody* dB = (DynamicBody*)list->data;
-			acceleration *= REALITY_MULTIPLIER;
-			dB->gravityAcceleration = acceleration;
+			acc *= REALITY_MULTIPLIER;
+			dB->gravityAcceleration = acc;
 			break;
 		}
 	}

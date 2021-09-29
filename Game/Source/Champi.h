@@ -24,17 +24,25 @@ public:
 
     virtual ~Champi();
 
+    void Start();
+
     void Update(float dt);
 
     void Draw(float dt);
 
     void Restart();
 
+    Body* GetBody()
+    {
+        return (Body*)body;
+    }
+
 private:
     ChampiState state = ChampiState::CHAMPI;
     Animation champiAnim;
     SDL_Rect rect = {};
     DynamicBody* body = nullptr;
+    Direction dir = Direction::LEFT;
 
     SDL_Rect champiSprites[4] = { {0, 0, 53, 53}, {53, 0, 53, 53}, {106, 0, 53, 53}, {159, 0, 53, 53} };
 };

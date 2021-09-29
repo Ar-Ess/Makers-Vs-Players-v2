@@ -157,7 +157,6 @@
     <ClInclude Include="Source\GuiManager.h" />
     <ClInclude Include="Source\GuiSlider.h" />
     <ClInclude Include="Source\GuiString.h" />
-    <ClInclude Include="Source\Item.h" />
     <ClInclude Include="Source\LevelEditorScene.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Particle.h" />

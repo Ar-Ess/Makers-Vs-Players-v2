@@ -1,5 +1,6 @@
 #include "Champi.h"
 #include "LevelEditorScene.h"
+#include "Player.h"
 
 Champi::Champi()
 {
@@ -39,19 +40,46 @@ Champi::~Champi()
 {
 }
 
+void Champi::Start()
+{
+	if (((editor->player->body->GetPosition().x + (PLAYER_W / 2)) - (body->GetPosition().x + 26)) >= 0) dir = Direction::LEFT;
+	else dir = Direction::RIGHT;
+}
+
 void Champi::Update(float dt)
 {
-	//body->Move(45.0f, Direction::RIGHT, 45.0f);
+	switch (state)
+	{
+	case ChampiState::CHAMPI:
+		body->Move(50.0f, dir, 50.0f);
+		if (editor->phys->ReturnPlayerCollision() == body)
+		{
+			state = ChampiState::COLLECTED;
+			body->SetCollidable(false);
+		}
+		break;
+
+	case ChampiState::COLLECTED:
+		break;
+	}
 }
 
 void Champi::Draw(float dt)
 {
 	bool debug = editor->phys->debug;
 
-	if (debug) app->render->DrawRectangle(rect, { 200, 200, 0, 150 });
+	switch (state)
+	{
+	case ChampiState::CHAMPI:
+		break;
+
+	case ChampiState::COLLECTED:
+		break;
+	}
 }
 
 void Champi::Restart()
 {
 	body->SetPosition(fPoint{float(coordinates.x * 53), float(coordinates.y * 53)});
+	body->SetCollidable(true);
 }

@@ -18,6 +18,8 @@ public: //Functions
 
 	~ArrowSignTile();
 
+	void Start();
+
 	void Update(float dt);
 
 	void Draw(float dt);

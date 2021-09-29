@@ -189,6 +189,7 @@ void LevelEditor::ChangeEditorState(EditorState newState)
 
 	case EditorState::PLAYING:
 		phys->PausePhysics(false);
+		for (list = tiles.start; list != nullptr; list = list->next) list->data->Start();
 		phys->ResetAllForces();
 		state = newState;
 		break;
@@ -487,7 +488,10 @@ bool LevelEditor::TileExistance(iPoint coords, TileType type)
 void LevelEditor::DeleteTileLogic(iPoint coords)
 {
 	Tile* destroyed = GetTileFromCoords(coords);
-	if (destroyed->GetBody() != nullptr) phys->DestroyBody(destroyed->GetBody());
+	if (destroyed->GetBody() != nullptr)
+	{
+		phys->DestroyBody(destroyed->GetBody());
+	}
 	delete destroyed;
 	tiles.Del(tiles.At(tiles.Find(destroyed)));
 	return;

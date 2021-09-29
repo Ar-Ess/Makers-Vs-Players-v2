@@ -44,6 +44,10 @@ BrickTile::~BrickTile()
 	delete body;
 }
 
+void BrickTile::Start()
+{
+}
+
 void BrickTile::Update(float dt)
 {
 	if (state == BrickState::COIN && utils.CheckCollision(rect, editor->player->body->ReturnBodyRect())) state = BrickState::COLLECTED;

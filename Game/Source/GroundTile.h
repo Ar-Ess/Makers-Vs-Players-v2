@@ -18,6 +18,8 @@ public: //Functions
 
 	~GroundTile();
 
+	void Start();
+
 	void Update(float dt);
 
 	void Draw(float dt);

@@ -39,12 +39,6 @@
     <ClCompile Include="Source\EntityManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Font.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -66,9 +60,6 @@
     <ClCompile Include="Source\Dialogue.cpp">
       <Filter>Dialogues</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Spline.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -77,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="Source\EasingFunctions.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Boss.cpp">
-      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\AssetsManager.cpp">
       <Filter>Modules</Filter>
@@ -123,6 +111,18 @@
     <ClCompile Include="Source\Champi.cpp">
       <Filter>Entities\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Entities\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Boss.cpp">
+      <Filter>Entities\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Entities\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC.cpp">
+      <Filter>Entities\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App.h" />
@@ -155,15 +155,6 @@
     </ClInclude>
     <ClInclude Include="Source\PQueue.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Audio.h">
       <Filter>Modules</Filter>
@@ -234,9 +225,6 @@
     <ClInclude Include="Source\Animation.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\NPC.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Spline.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -245,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="Source\EasingFunctions.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Boss.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\AssetsManager.h">
       <Filter>Modules</Filter>
@@ -282,9 +267,6 @@
     <ClInclude Include="Source\Coin.h">
       <Filter>Entities\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Item.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Source\BrickTile.h">
       <Filter>Entities\Tiles</Filter>
     </ClInclude>
@@ -299,6 +281,21 @@
     </ClInclude>
     <ClInclude Include="Source\Tile.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Entities\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Boss.h">
+      <Filter>Entities\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Entities\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Entities\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC.h">
+      <Filter>Entities\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +334,9 @@
     </Filter>
     <Filter Include="Entities\Signs">
       <UniqueIdentifier>{478d061a-539e-48b3-9916-57a07f86765c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Character">
+      <UniqueIdentifier>{7dac0c14-d231-44b3-a4ed-0e2b8801a2d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -38,6 +38,10 @@ ArrowSignTile::~ArrowSignTile()
 	return;
 }
 
+void ArrowSignTile::Start()
+{
+}
+
 void ArrowSignTile::Update(float dt)
 {
 	return;
